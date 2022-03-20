@@ -1,26 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import {
-  dividerGreenStyles,
-  formContainer,
-  loginBar,
-  loginBarH1,
-} from './styles';
+import { formContainer, spinnerStyle } from './styles';
 import { labels, PAGE } from '../../constants';
-import { Button, Form } from 'react-bootstrap';
+import { Button, Form, Spinner } from 'react-bootstrap';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { loginRequest } from '../slice';
+import { clearError, loginRequest } from '../slice';
 import { RootState } from '../../store';
 import { flexColumnStyle, margin } from '../../styles';
-import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
 
   const error = useAppSelector((state: RootState) => state.auth.error);
-  const isAuthorized = useAppSelector(
-    (state: RootState) => !!state.auth?.profile?.id,
-  );
+  const fetching = useAppSelector((state: RootState) => state.auth.fetching);
 
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -30,17 +21,19 @@ const Login = () => {
     dispatch(loginRequest(payload));
   };
 
-  useEffect(() => {
-    console.log(email);
-  }, [email]);
+  const onUnmount = () => {
+    dispatch(clearError());
+  };
 
-  if (isAuthorized) {
-    navigate(PAGE.HOME, { replace: true });
-  }
+  useEffect(() => {
+    return onUnmount;
+  }, []);
 
   return (
     <>
       <div style={formContainer}>
+        <h1>{labels.login.signIn}</h1>
+        <hr />
         <Form>
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label>Email address</Form.Label>
@@ -71,6 +64,9 @@ const Login = () => {
               </Form.Text>
             )}
             <Button variant="primary" type="button" onClick={authorize}>
+              {fetching && (
+                <Spinner style={spinnerStyle} size="sm" animation="border" />
+              )}
               {labels.login.signIn}
             </Button>
           </div>

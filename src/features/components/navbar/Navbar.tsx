@@ -32,14 +32,21 @@ const CustomNavbar = () => {
           </Link>
         </Navbar.Brand>
         {isAuthorized ? (
-          <Nav style={alignRight}>
-            <Link style={linkStyle} to={`/${PAGE.PROFILE}`}>
-              {username}
-            </Link>
-            <Link style={linkStyle} to={PAGE.HOME} onClick={logOutUser}>
-              {labels.navbar.logout}
-            </Link>
-          </Nav>
+          <>
+            <Nav>
+              <Link style={linkStyle} to={`/${PAGE.EVENTS}`}>
+                {labels.navbar.events}
+              </Link>
+            </Nav>
+            <Nav style={alignRight}>
+              <Link style={linkStyle} to={`/${PAGE.PROFILE}`}>
+                {username}
+              </Link>
+              <Link style={linkStyle} to={PAGE.HOME} onClick={logOutUser}>
+                {labels.navbar.logout}
+              </Link>
+            </Nav>
+          </>
         ) : (
           <Nav style={alignRight}>
             <Link style={linkStyle} to={`/${PAGE.LOGIN}`}>

@@ -1,15 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { actionTypes, IUser } from './types';
-import { HTTPError } from '../types';
-import { ILoginReq, loginThunk } from './thunk';
-import { RootState } from '../store';
-import { prepareSliceReducerNetworkNeed } from '../utils/reduxUtils';
+import { IUser } from './types';
 
 export interface AuthState {
   profile?: IUser;
   authToken?: string;
   fetching: boolean;
   error?: string;
+  registerStatus?: boolean;
 }
 
 const initialState: AuthState = {
@@ -25,6 +22,10 @@ const authSlice = createSlice({
       state.authToken = undefined;
       state.error = undefined;
       state.fetching = false;
+    },
+
+    clearError: (state: AuthState) => {
+      state.error = undefined;
     },
 
     loginRequest: (state: AuthState, { payload }) => {
@@ -45,9 +46,32 @@ const authSlice = createSlice({
       state.profile = undefined;
       state.authToken = undefined;
     },
+
+    registerRequest: (state: AuthState, { payload }) => {
+      state.fetching = true;
+      state.error = undefined;
+    },
+    registerSuccess: (state: AuthState, action: PayloadAction<IUser>) => {
+      state.fetching = false;
+      state.error = undefined;
+      state.registerStatus = true;
+      state.profile = { email: action.payload.email } as IUser;
+    },
+    registerFailed: (state: AuthState, action: PayloadAction<string>) => {
+      state.fetching = false;
+      state.error = action.payload;
+    },
   },
 });
 
-export const { clear, loginRequest, loginSuccess, loginFailed } =
-  authSlice.actions;
+export const {
+  clear,
+  loginRequest,
+  loginSuccess,
+  loginFailed,
+  registerRequest,
+  registerSuccess,
+  registerFailed,
+  clearError,
+} = authSlice.actions;
 export default authSlice.reducer;

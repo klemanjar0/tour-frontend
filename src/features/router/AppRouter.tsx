@@ -1,12 +1,32 @@
-import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import App from '../../App';
 import Login from '../auth/pages/Login';
 import CustomNavbar from '../components/navbar/Navbar';
-import { useAppSelector } from '../store/hooks';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { RootState } from '../store';
+import { PAGE } from '../constants';
+import Register from '../auth/pages/Register';
+import { setCurrentRoute } from './slice';
+import { useObservableRouter } from './hooks';
+import Events from '../events/pages/Events';
+
+const unAuthorizedPages: React.ReactElement[] = [
+  <Route
+    key={`page_${PAGE.REGISTER}`}
+    path={PAGE.REGISTER}
+    element={<Register />}
+  />,
+  <Route key={`page_${PAGE.LOGIN}`} path={PAGE.LOGIN} element={<Login />} />,
+];
+
+const authorizedPages: React.ReactElement[] = [
+  <Route key={`page_${PAGE.EVENTS}`} path={PAGE.EVENTS} element={<Events />} />,
+];
 
 const AppRouter = () => {
+  useObservableRouter();
+
   const isAuthorized = useAppSelector(
     (state: RootState) => !!state.auth?.profile?.id,
   );
@@ -16,7 +36,7 @@ const AppRouter = () => {
       <CustomNavbar />
       <Routes>
         <Route path="/" element={<App />} />
-        {!isAuthorized && [<Route path="login" element={<Login />} />]}
+        {isAuthorized ? authorizedPages : unAuthorizedPages}
       </Routes>
     </>
   );

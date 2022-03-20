@@ -4,13 +4,14 @@ import { RootState } from '../store';
 import ErrorService from './errorService';
 import { isInstanceOfHTTPError } from './utils';
 
-export const server = 'http://localhost:4000/';
+export const server = 'http://localhost:4000/'; //'http://192.168.1.103:4000/'
 
 export const ENDPOINT = {
   REGISTER: 'auth/register',
   LOGIN: 'auth/login',
   INITIALIZE_ADMIN: 'auth/initialize_admin',
   ERROR_CODES: 'error-codes',
+  MY_EVENTS: 'events/myEvents',
 };
 
 const withServer = (endpoint: string) => `${server}${endpoint}`;

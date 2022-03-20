@@ -23,8 +23,15 @@ export const flexColumnStyle: CSS.Properties = {
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'start',
+  marginTop: '0.5rem',
 };
 
 export const margin: CSS.Properties = {
-  margin: '0.5rem',
+  marginTop: '0.5rem',
+  marginBottom: '0.5rem',
+  fontWeight: 'bold',
+};
+
+export const marginTop: CSS.Properties = {
+  marginTop: '0.5rem',
 };
