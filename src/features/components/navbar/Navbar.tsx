@@ -2,7 +2,14 @@ import React from 'react';
 import { Container, Navbar, Nav } from 'react-bootstrap';
 import { Outlet, Link, useNavigate } from 'react-router-dom';
 import { labels, PAGE } from '../../constants';
-import { alignRight, linkStyle, navbarStyle } from '../../styles';
+import {
+  alignLeft,
+  alignRight,
+  justifySpace,
+  linkContainer,
+  linkStyle,
+  navbarStyle,
+} from '../../styles';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { RootState } from '../../store';
 import { clear } from '../../auth/slice';
@@ -26,14 +33,14 @@ const CustomNavbar = () => {
   return (
     <Navbar bg="light" variant="light">
       <Container style={navbarStyle}>
-        <Navbar.Brand>
+        <Navbar.Brand style={alignLeft}>
           <Link style={linkStyle} to={PAGE.HOME}>
             {labels.navbar.title}
           </Link>
         </Navbar.Brand>
         {isAuthorized ? (
-          <>
-            <Nav>
+          <div style={linkContainer}>
+            <Nav style={alignLeft}>
               <Link style={linkStyle} to={`/${PAGE.EVENTS}`}>
                 {labels.navbar.events}
               </Link>
@@ -46,16 +53,18 @@ const CustomNavbar = () => {
                 {labels.navbar.logout}
               </Link>
             </Nav>
-          </>
+          </div>
         ) : (
-          <Nav style={alignRight}>
-            <Link style={linkStyle} to={`/${PAGE.LOGIN}`}>
-              {labels.navbar.login}
-            </Link>
-            <Link style={linkStyle} to={`/${PAGE.REGISTER}`}>
-              {labels.navbar.register}
-            </Link>
-          </Nav>
+          <div style={linkContainer}>
+            <Nav style={alignRight}>
+              <Link style={linkStyle} to={`/${PAGE.LOGIN}`}>
+                {labels.navbar.login}
+              </Link>
+              <Link style={linkStyle} to={`/${PAGE.REGISTER}`}>
+                {labels.navbar.register}
+              </Link>
+            </Nav>
+          </div>
         )}
       </Container>
     </Navbar>

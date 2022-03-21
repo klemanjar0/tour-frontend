@@ -3,6 +3,8 @@ import { IEvent, TransformedEvent } from './types';
 
 export interface EventsState {
   myEvents: TransformedEvent[];
+  selectedEventId?: number;
+  eventView?: TransformedEvent;
   fetching: boolean;
   error?: string;
 }
@@ -19,6 +21,22 @@ const eventsSlice = createSlice({
     clearEvents: (state: EventsState) => {
       state.myEvents = [];
       state.fetching = false;
+    },
+
+    selectEvent: (state: EventsState, action: PayloadAction<number>) => {
+      state.selectedEventId = action.payload;
+    },
+    clearSelectionEvent: (state: EventsState) => {
+      state.selectedEventId = undefined;
+    },
+    openEventView: (
+      state: EventsState,
+      action: PayloadAction<TransformedEvent>,
+    ) => {
+      state.eventView = action.payload;
+    },
+    clearEventView: (state: EventsState) => {
+      state.eventView = undefined;
     },
 
     myEventRequest: (state: EventsState) => {
@@ -40,6 +58,14 @@ const eventsSlice = createSlice({
   },
 });
 
-export const { clearEvents, myEventRequest, myEventSuccess, myEventFailed } =
-  eventsSlice.actions;
+export const {
+  clearEvents,
+  myEventRequest,
+  myEventSuccess,
+  myEventFailed,
+  selectEvent,
+  clearSelectionEvent,
+  openEventView,
+  clearEventView,
+} = eventsSlice.actions;
 export default eventsSlice.reducer;

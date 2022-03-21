@@ -1,6 +1,7 @@
-import { IEvent, TransformedEvent } from './types';
+import { EventStatuses, IEvent, TransformedEvent } from './types';
 import map from 'lodash/map';
 import head from 'lodash/head';
+import { EventStatus } from '../constants';
 
 export const transformEvents = (events: IEvent[]): TransformedEvent[] => {
   return (
@@ -22,4 +23,8 @@ export const transformEvents = (events: IEvent[]): TransformedEvent[] => {
       };
     }) || ([] as TransformedEvent[])
   );
+};
+
+export const getEventStatus = (status: EventStatuses) => {
+  return EventStatus[status];
 };

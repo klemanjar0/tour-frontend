@@ -7,11 +7,28 @@ export const navbarStyle: CSS.Properties = {
   width: '80%',
 };
 
+export const linkContainer: CSS.Properties = {
+  display: 'flex',
+  flexDirection: 'row',
+  alignItems: 'center',
+};
+
+export const justifySpace: CSS.Properties = {
+  display: 'flex',
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+};
+
 export const linkStyle: CSS.Properties = {
   textDecoration: 'none',
   fontFamily: 'sans-serif',
   color: 'black',
   padding: '0.5rem',
+};
+
+export const alignLeft: CSS.Properties = {
+  display: 'flex',
+  alignSelf: 'start',
 };
 
 export const alignRight: CSS.Properties = {

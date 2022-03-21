@@ -22,4 +22,16 @@ export const labels = {
   register: {
     signUp: 'Sign Up',
   },
+  event: {
+    manage: 'Manage Event',
+  },
+};
+
+export const EventStatus = {
+  0: 'Not started yet',
+  1: 'Registration started',
+  2: 'Registration finished',
+  4: 'Event in progress',
+  8: 'Event finished',
+  16: 'Event closed',
 };
