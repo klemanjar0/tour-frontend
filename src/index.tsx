@@ -7,12 +7,15 @@ import { BrowserRouter } from 'react-router-dom';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import AppRouter from './features/router/AppRouter';
+import GlobalSpinner from './features/spinner/pages/Spinner';
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <BrowserRouter>
-        <AppRouter />
+        <GlobalSpinner>
+          <AppRouter />
+        </GlobalSpinner>
       </BrowserRouter>
     </Provider>
   </React.StrictMode>,

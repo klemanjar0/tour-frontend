@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Badge, Image } from 'react-bootstrap';
+import { Container, NavDropdown, Image } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { RootState } from '../../store';
@@ -32,7 +32,6 @@ const ProfileBadge: React.FC<Props> = (params) => {
     <Container className="flex flex-row justify-content-center align-items-center">
       {isAuthorized ? (
         <>
-          <Image src={imageUrl} height={40} width={40} roundedCircle />
           <Link style={linkStyle} to={`/${PAGE.PROFILE}`}>
             {username}
           </Link>

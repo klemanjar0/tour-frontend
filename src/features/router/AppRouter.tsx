@@ -10,6 +10,7 @@ import Register from '../auth/pages/Register';
 import { setCurrentRoute } from './slice';
 import { useObservableRouter } from './hooks';
 import Events from '../events/pages/Events';
+import Profile from '../profile/pages/Profile';
 
 const unAuthorizedPages: React.ReactElement[] = [
   <Route
@@ -22,6 +23,11 @@ const unAuthorizedPages: React.ReactElement[] = [
 
 const authorizedPages: React.ReactElement[] = [
   <Route key={`page_${PAGE.EVENTS}`} path={PAGE.EVENTS} element={<Events />} />,
+  <Route
+    key={`page_${PAGE.PROFILE}`}
+    path={PAGE.PROFILE}
+    element={<Profile />}
+  />,
 ];
 
 const AppRouter = () => {

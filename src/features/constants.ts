@@ -25,6 +25,10 @@ export const labels = {
   event: {
     manage: 'Manage Event',
   },
+  profile: {
+    role: 'Service role',
+    updateImage: 'Update image',
+  },
 };
 
 export const EventStatus = {
@@ -34,4 +38,12 @@ export const EventStatus = {
   4: 'Event in progress',
   8: 'Event finished',
   16: 'Event closed',
+};
+
+export const UserRole = {
+  1: 'No access',
+  100: 'Default',
+  200: 'Editor',
+  400: 'Admin',
+  500: 'Super admin',
 };
