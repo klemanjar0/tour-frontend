@@ -1,9 +1,6 @@
 import CSS from 'csstype';
 
 export const navbarStyle: CSS.Properties = {
-  display: 'flex',
-  flexDirection: 'row',
-  alignItems: 'center',
   width: '80%',
 };
 
@@ -23,6 +20,13 @@ export const linkStyle: CSS.Properties = {
   textDecoration: 'none',
   fontFamily: 'sans-serif',
   color: 'black',
+  padding: '0.5rem',
+};
+
+export const linkStyleRed: CSS.Properties = {
+  textDecoration: 'none',
+  fontFamily: 'sans-serif',
+  color: 'red',
   padding: '0.5rem',
 };
 

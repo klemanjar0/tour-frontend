@@ -4,6 +4,7 @@ import {
   FormControl,
   Form,
   FloatingLabel,
+  Image,
   Button,
   Spinner,
 } from 'react-bootstrap';
@@ -21,6 +22,7 @@ const Register = () => {
   const [username, setUsername] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const [files, setFiles] = useState<Array<any> | null>(null);
 
   const error = useAppSelector((state: RootState) => state.auth.error);
   const fetching = useAppSelector((state: RootState) => state.auth.fetching);
@@ -44,7 +46,8 @@ const Register = () => {
   }, []);
 
   const register = async () => {
-    const payload = { username, email, password };
+    const file = files?.length ? files[0] : null;
+    const payload = { username, email, password, file };
     dispatch(registerRequest(payload));
     if (!error) {
       clearFields();
@@ -66,6 +69,16 @@ const Register = () => {
             onChange={(event: any) => setUsername(event.target.value)}
           />
         </InputGroup>
+        <Form.Group controlId="formFile" className="mb-3">
+          <Form.Label>Pick avatar</Form.Label>
+          <Form.Control
+            onChange={(event: any) => {
+              setFiles(event.target.files);
+            }}
+            type="file"
+            accept="image/*"
+          />
+        </Form.Group>
         <FloatingLabel
           controlId="floatingInput"
           label="Email address"

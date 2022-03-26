@@ -12,9 +12,11 @@ export const ENDPOINT = {
   INITIALIZE_ADMIN: 'auth/initialize_admin',
   ERROR_CODES: 'error-codes',
   MY_EVENTS: 'events/myEvents',
+  UPLOAD_FILE: 'upload-file',
+  GET_FILE: (fileId: number) => `file/${fileId}`,
 };
 
-const withServer = (endpoint: string) => `${server}${endpoint}`;
+export const withServer = (endpoint: string) => `${server}${endpoint}`;
 
 const instance = axios.create();
 
@@ -41,6 +43,24 @@ export const buildHeaders = (state: RootState, data: any, method = 'POST') => {
     },
     data,
   };
+};
+
+export const callApiWithImage = async (file: any) => {
+  const formData = new FormData();
+
+  formData.append('file', file);
+
+  const response = await instance.post(
+    withServer(ENDPOINT.UPLOAD_FILE),
+    formData,
+    {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    },
+  );
+
+  return response.data;
 };
 
 export const callApi = async (url: string, options: any) => {

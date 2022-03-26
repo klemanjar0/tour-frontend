@@ -13,59 +13,28 @@ import {
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { RootState } from '../../store';
 import { clear } from '../../auth/slice';
+import ProfileBadge from '../common/ProfileBadge';
+import NavbarItems from '../common/NavbarItems';
 
 const CustomNavbar = () => {
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
   const isAuthorized = useAppSelector(
     (state: RootState) => !!state.auth.profile?.id,
   );
 
-  const username = useAppSelector(
-    (state: RootState) => state.auth.profile?.username,
-  );
-
-  const logOutUser = () => {
-    dispatch(clear());
-    navigate(PAGE.HOME, { replace: true });
-  };
-
   return (
     <Navbar bg="light" variant="light">
-      <Container style={navbarStyle}>
-        <Navbar.Brand style={alignLeft}>
-          <Link style={linkStyle} to={PAGE.HOME}>
-            {labels.navbar.title}
-          </Link>
-        </Navbar.Brand>
-        {isAuthorized ? (
-          <div style={linkContainer}>
-            <Nav style={alignLeft}>
-              <Link style={linkStyle} to={`/${PAGE.EVENTS}`}>
-                {labels.navbar.events}
-              </Link>
-            </Nav>
-            <Nav style={alignRight}>
-              <Link style={linkStyle} to={`/${PAGE.PROFILE}`}>
-                {username}
-              </Link>
-              <Link style={linkStyle} to={PAGE.HOME} onClick={logOutUser}>
-                {labels.navbar.logout}
-              </Link>
-            </Nav>
-          </div>
-        ) : (
-          <div style={linkContainer}>
-            <Nav style={alignRight}>
-              <Link style={linkStyle} to={`/${PAGE.LOGIN}`}>
-                {labels.navbar.login}
-              </Link>
-              <Link style={linkStyle} to={`/${PAGE.REGISTER}`}>
-                {labels.navbar.register}
-              </Link>
-            </Nav>
-          </div>
-        )}
+      <Container className="d-flex flex-row justify-content-between align-items-center w-100">
+        <div className="d-flex flex-row align-items-center">
+          <Navbar.Brand>
+            <Link style={linkStyle} to={PAGE.HOME}>
+              {labels.navbar.title}
+            </Link>
+          </Navbar.Brand>
+          {isAuthorized && <NavbarItems />}
+        </div>
+        <div className="d-flex flex-row align-items-center">
+          <ProfileBadge isAuthorized={isAuthorized} />
+        </div>
       </Container>
     </Navbar>
   );

@@ -20,5 +20,6 @@ export interface IUser {
   role: UserRoles;
   createdAt?: string;
   updatedAt?: string;
+  imageUrl?: string;
   events?: Event[];
 }

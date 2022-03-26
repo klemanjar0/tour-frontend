@@ -1,5 +1,11 @@
 import { call, put, takeLatest, select, all } from 'redux-saga/effects';
-import { buildHeaders, callApi, ENDPOINT, setHeaders } from '../api';
+import {
+  buildHeaders,
+  callApi,
+  callApiWithImage,
+  ENDPOINT,
+  setHeaders,
+} from '../api';
 import { RootState } from '../store';
 import {
   loginRequest,
@@ -11,6 +17,7 @@ import {
 } from './slice';
 import { setBackRoute } from '../router/slice';
 import { PAGE } from '../constants';
+import { appendImageURL } from './utils';
 
 export function* loginUserSaga({ payload }: any): any {
   try {
@@ -30,7 +37,8 @@ export function* loginUserSaga({ payload }: any): any {
     const authHeader = response.authToken;
 
     yield call(setHeaders, { authToken: authHeader });
-    yield put(loginSuccess(response));
+    const withImage = appendImageURL(response);
+    yield put(loginSuccess(withImage));
   } catch (e: any) {
     yield put(loginFailed(e.message as string));
   }
@@ -39,12 +47,17 @@ export function* loginUserSaga({ payload }: any): any {
 export function* registerUserSaga({ payload }: any): any {
   try {
     const state: RootState = yield select();
-    const { email, password, username } = payload;
+    const { email, password, username, file } = payload;
+
+    const uploaded = yield call(callApiWithImage, file);
+
     const json = {
       email,
       username,
       pwdHash: password,
+      fileId: uploaded.fileId,
     };
+
     const response = yield call(
       callApi,
       ENDPOINT.REGISTER,
