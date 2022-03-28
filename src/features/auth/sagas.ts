@@ -14,10 +14,14 @@ import {
   registerSuccess,
   registerFailed,
   registerRequest,
+  passwordChangeRequest,
+  passwordChangeSuccess,
+  passwordChangeFailed,
 } from './slice';
 import { setBackRoute } from '../router/slice';
 import { PAGE } from '../constants';
 import { appendImageURL } from './utils';
+import { updateProfileSyncActionTime } from "../syncConnector/slice";
 
 export function* loginUserSaga({ payload }: any): any {
   try {
@@ -69,9 +73,27 @@ export function* registerUserSaga({ payload }: any): any {
   }
 }
 
+export function* changePasswordSaga({ payload }: any): any {
+  try {
+    const state: RootState = yield select();
+    const { oldPassword, newPassword } = payload;
+
+    yield call(
+      callApi,
+      ENDPOINT.UPDATE_PASSWORD,
+      buildHeaders(state, { oldPassword, newPassword }, 'PUT'),
+    );
+    yield put(updateProfileSyncActionTime(Date.now()));
+    yield put(passwordChangeSuccess());
+  } catch (e: any) {
+    yield put(passwordChangeFailed(e.message as string));
+  }
+}
+
 export default function* root() {
   yield all([
     takeLatest(loginRequest, loginUserSaga),
     takeLatest(registerRequest, registerUserSaga),
+    takeLatest(passwordChangeRequest, changePasswordSaga),
   ]);
 }

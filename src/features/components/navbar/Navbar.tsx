@@ -2,17 +2,9 @@ import React from 'react';
 import { Container, Navbar, Nav } from 'react-bootstrap';
 import { Outlet, Link, useNavigate } from 'react-router-dom';
 import { labels, PAGE } from '../../constants';
-import {
-  alignLeft,
-  alignRight,
-  justifySpace,
-  linkContainer,
-  linkStyle,
-  navbarStyle,
-} from '../../styles';
+import { linkStyle } from '../../styles';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { RootState } from '../../store';
-import { clear } from '../../auth/slice';
 import ProfileBadge from '../common/ProfileBadge';
 import NavbarItems from '../common/NavbarItems';
 

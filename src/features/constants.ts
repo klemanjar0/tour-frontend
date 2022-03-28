@@ -1,3 +1,6 @@
+import { Notification } from './notifications/NotificationService';
+import moment from 'moment/moment';
+
 export const PAGE = {
   HOME: '/',
   LOGIN: 'login',
@@ -28,7 +31,28 @@ export const labels = {
   profile: {
     role: 'Service role',
     updateImage: 'Update image',
+    updatePassword: 'Update password',
   },
+  common: {
+    save: 'Save',
+    cancel: 'Cancel',
+  },
+};
+
+export const dateToString = (date: number | Date) =>
+  moment(date).format('hh:mm:ss');
+
+export const notifications = {
+  passwordChanged: (date: number | Date) => ({
+    title: 'Password change',
+    body: 'Password has been successfully changed',
+    date: dateToString(date),
+  }),
+  featureLocked: (date: number | Date) => ({
+    title: 'Error',
+    body: 'Feature is currently unavailable',
+    date: dateToString(date),
+  }),
 };
 
 export const EventStatus = {

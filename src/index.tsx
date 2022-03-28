@@ -8,13 +8,16 @@ import { BrowserRouter } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import AppRouter from './features/router/AppRouter';
 import GlobalSpinner from './features/spinner/pages/Spinner';
+import NotificationProvider from './features/notifications/pages/NotificationProvider';
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <BrowserRouter>
         <GlobalSpinner>
-          <AppRouter />
+          <NotificationProvider>
+            <AppRouter />
+          </NotificationProvider>
         </GlobalSpinner>
       </BrowserRouter>
     </Provider>

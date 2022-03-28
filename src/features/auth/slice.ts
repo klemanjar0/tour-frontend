@@ -50,6 +50,7 @@ const authSlice = createSlice({
     registerRequest: (state: AuthState, { payload }) => {
       state.fetching = true;
       state.error = undefined;
+      state.registerStatus = false;
     },
     registerSuccess: (state: AuthState, action: PayloadAction<IUser>) => {
       state.fetching = false;
@@ -58,6 +59,20 @@ const authSlice = createSlice({
       state.profile = { email: action.payload.email } as IUser;
     },
     registerFailed: (state: AuthState, action: PayloadAction<string>) => {
+      state.fetching = false;
+      state.registerStatus = false;
+      state.error = action.payload;
+    },
+
+    passwordChangeRequest: (state: AuthState, { payload }) => {
+      state.fetching = true;
+      state.error = undefined;
+    },
+    passwordChangeSuccess: (state: AuthState) => {
+      state.fetching = false;
+      state.error = undefined;
+    },
+    passwordChangeFailed: (state: AuthState, action: PayloadAction<string>) => {
       state.fetching = false;
       state.error = action.payload;
     },
@@ -73,5 +88,8 @@ export const {
   registerSuccess,
   registerFailed,
   clearError,
+  passwordChangeRequest,
+  passwordChangeSuccess,
+  passwordChangeFailed,
 } = authSlice.actions;
 export default authSlice.reducer;

@@ -14,6 +14,7 @@ export const ENDPOINT = {
   MY_EVENTS: 'events/myEvents',
   UPLOAD_FILE: 'upload-file',
   GET_FILE: (fileId: number) => `file/${fileId}`,
+  UPDATE_PASSWORD: 'user-manage/update-password',
 };
 
 export const withServer = (endpoint: string) => `${server}${endpoint}`;

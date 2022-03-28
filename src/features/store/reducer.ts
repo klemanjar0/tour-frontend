@@ -2,6 +2,8 @@ import authReducer from '../auth/slice';
 import routerReducer from '../router/slice';
 import eventsReducer from '../events/slice';
 import spinnerReducer from '../spinner/slice';
+import syncReducer from '../syncConnector/slice';
+import notificationReducer from '../notifications/slice';
 import { combineReducers } from 'redux';
 
 const rootReducer = {
@@ -9,6 +11,8 @@ const rootReducer = {
   router: routerReducer,
   events: eventsReducer,
   spinner: spinnerReducer,
+  sync: syncReducer,
+  notifications: notificationReducer,
 };
 
 export default rootReducer;

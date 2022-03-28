@@ -6,6 +6,7 @@ import { RootState } from '../../store';
 import { clear } from '../../auth/slice';
 import { labels, PAGE } from '../../constants';
 import { linkStyle, linkStyleRed } from '../../styles';
+import { FaSignOutAlt } from 'react-icons/fa';
 
 interface Props {
   isAuthorized: boolean;
@@ -29,15 +30,23 @@ const ProfileBadge: React.FC<Props> = (params) => {
     navigate(PAGE.HOME, { replace: true });
   };
   return (
-    <Container className="flex flex-row justify-content-center align-items-center">
+    <Container className="d-flex flex-row justify-content-center align-items-center">
       {isAuthorized ? (
         <>
-          <Link style={linkStyle} to={`/${PAGE.PROFILE}`}>
-            {username}
-          </Link>
-          <Link style={linkStyleRed} to={PAGE.HOME} onClick={logOutUser}>
-            {labels.navbar.logout}
-          </Link>
+          <div className="d-flex">
+            <Link style={linkStyle} to={`/${PAGE.PROFILE}`}>
+              {username}
+            </Link>
+          </div>
+          <div
+            className="d-flex flex-row justify-content-between align-items-center"
+            onClick={logOutUser}
+          >
+            <Link style={linkStyleRed} to={PAGE.HOME}>
+              {labels.navbar.logout}
+            </Link>
+            <FaSignOutAlt color="red" />
+          </div>
         </>
       ) : (
         <>
