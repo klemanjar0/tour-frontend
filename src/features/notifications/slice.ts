@@ -1,18 +1,35 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Notification } from './NotificationService';
 
+export interface NodeNotification {
+  id: number;
+  title: string;
+  body: string;
+  seen: boolean;
+  userId: number;
+  user: any;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface NotificationState {
   activeNotifications: Notification[];
+  myNotifications: NodeNotification[];
+  fetching: boolean;
+  error?: string;
 }
 
 const initialState: NotificationState = {
   activeNotifications: [],
+  myNotifications: [],
+  fetching: false,
 };
 
 const notificationSlice = createSlice({
   name: 'notifications',
   initialState,
   reducers: {
+    clearNotifications: () => initialState,
     setNotifications: (
       state: NotificationState,
       action: PayloadAction<Notification[]>,
@@ -51,6 +68,7 @@ const notificationSlice = createSlice({
 });
 
 export const {
+  clearNotifications,
   setNotifications,
   hideNotification,
   pushNotification,

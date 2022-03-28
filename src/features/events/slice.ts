@@ -22,7 +22,6 @@ const eventsSlice = createSlice({
       state.myEvents = [];
       state.fetching = false;
     },
-
     selectEvent: (state: EventsState, action: PayloadAction<number>) => {
       state.selectedEventId = action.payload;
     },
@@ -55,6 +54,18 @@ const eventsSlice = createSlice({
       state.fetching = false;
       state.error = action.payload;
     },
+    createEventRequest: (state: EventsState, { payload }) => {
+      state.fetching = true;
+      state.error = undefined;
+    },
+    createEventSuccess: (state: EventsState) => {
+      state.fetching = false;
+      state.error = undefined;
+    },
+    createEventFailed: (state: EventsState, action: PayloadAction<string>) => {
+      state.fetching = false;
+      state.error = action.payload;
+    },
   },
 });
 
@@ -67,5 +78,8 @@ export const {
   clearSelectionEvent,
   openEventView,
   clearEventView,
+  createEventRequest,
+  createEventSuccess,
+  createEventFailed,
 } = eventsSlice.actions;
 export default eventsSlice.reducer;

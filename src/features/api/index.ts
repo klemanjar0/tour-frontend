@@ -4,7 +4,7 @@ import { RootState } from '../store';
 import ErrorService from './errorService';
 import { isInstanceOfHTTPError } from './utils';
 
-export const server = 'http://localhost:4000/'; //'http://192.168.1.103:4000/'
+export const server = 'http://192.168.1.103:4000/'; //'http://192.168.1.103:4000/'
 
 export const ENDPOINT = {
   REGISTER: 'auth/register',
@@ -15,6 +15,7 @@ export const ENDPOINT = {
   UPLOAD_FILE: 'upload-file',
   GET_FILE: (fileId: number) => `file/${fileId}`,
   UPDATE_PASSWORD: 'user-manage/update-password',
+  CREATE_EVENT: 'events/create',
 };
 
 export const withServer = (endpoint: string) => `${server}${endpoint}`;

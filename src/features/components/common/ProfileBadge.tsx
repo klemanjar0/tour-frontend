@@ -1,12 +1,12 @@
 import React from 'react';
-import { Container, NavDropdown, Image } from 'react-bootstrap';
+import { Container, NavDropdown, Badge } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { RootState } from '../../store';
 import { clear } from '../../auth/slice';
 import { labels, PAGE } from '../../constants';
 import { linkStyle, linkStyleRed } from '../../styles';
-import { FaSignOutAlt } from 'react-icons/fa';
+import { FaSignOutAlt, FaBell } from 'react-icons/fa';
 
 interface Props {
   isAuthorized: boolean;
@@ -21,8 +21,8 @@ const ProfileBadge: React.FC<Props> = (params) => {
   const username = useAppSelector(
     (state: RootState) => state.auth.profile?.username,
   );
-  const imageUrl = useAppSelector(
-    (state: RootState) => state.auth.profile?.imageUrl,
+  const notifyCount = useAppSelector(
+    (state: RootState) => state.notifications.myNotifications.length,
   );
 
   const logOutUser = () => {
@@ -33,10 +33,14 @@ const ProfileBadge: React.FC<Props> = (params) => {
     <Container className="d-flex flex-row justify-content-center align-items-center">
       {isAuthorized ? (
         <>
-          <div className="d-flex">
+          <div className="d-flex flex-row align-items-center mr-4">
             <Link style={linkStyle} to={`/${PAGE.PROFILE}`}>
               {username}
             </Link>
+            <Badge className="d-flex flex-row p-1" pill bg="danger">
+              <FaBell className="m-1" />
+              <div className="m-1">{notifyCount}</div>
+            </Badge>
           </div>
           <div
             className="d-flex flex-row justify-content-between align-items-center"

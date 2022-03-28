@@ -20,6 +20,6 @@ export const useObservableRouter = () => {
   }, [backRoute]);
 
   useEffect(() => {
-    dispatch(setCurrentRoute(location.key));
+    dispatch(setCurrentRoute(location.pathname));
   }, [location]);
 };

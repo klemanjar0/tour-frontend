@@ -21,7 +21,7 @@ import {
 import { setBackRoute } from '../router/slice';
 import { PAGE } from '../constants';
 import { appendImageURL } from './utils';
-import { updateProfileSyncActionTime } from "../syncConnector/slice";
+import { updateProfileSyncActionTime } from '../syncConnector/slice';
 
 export function* loginUserSaga({ payload }: any): any {
   try {

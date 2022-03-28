@@ -11,6 +11,9 @@ import { setCurrentRoute } from './slice';
 import { useObservableRouter } from './hooks';
 import Events from '../events/pages/Events';
 import Profile from '../profile/pages/Profile';
+import CreateEvent from '../events/pages/CreateEvent';
+import MyEventsList from '../events/pages/MyEventsList';
+import EventManager from '../events/pages/EventManager';
 
 const unAuthorizedPages: React.ReactElement[] = [
   <Route
@@ -22,7 +25,23 @@ const unAuthorizedPages: React.ReactElement[] = [
 ];
 
 const authorizedPages: React.ReactElement[] = [
-  <Route key={`page_${PAGE.EVENTS}`} path={PAGE.EVENTS} element={<Events />} />,
+  <Route key={`page_${PAGE.EVENTS}`} path={PAGE.EVENTS} element={<Events />}>
+    <Route
+      key={`page_${PAGE.CREATE_EVENT}`}
+      path={PAGE.CREATE_EVENT}
+      element={<CreateEvent />}
+    />
+    <Route
+      key={`page_${PAGE.MY_EVENTS}`}
+      path={PAGE.MY_EVENTS}
+      element={<MyEventsList />}
+    />
+    <Route
+      key={`page_${PAGE.MANAGE_EVENT}`}
+      path={PAGE.MANAGE_EVENT}
+      element={<EventManager />}
+    />
+  </Route>,
   <Route
     key={`page_${PAGE.PROFILE}`}
     path={PAGE.PROFILE}

@@ -6,7 +6,9 @@ import {
   pushNotification,
   removeNotification,
   hideNotification,
+  clearNotifications,
 } from './slice';
+import { clearEvents } from '../events/slice';
 
 export interface Notification {
   id?: number;
@@ -24,9 +26,17 @@ export const useNotifications = () => {
 
   const showNotification = (notification: Notification) => {
     const id = Date.now();
-    const _notify = { ...notification, id: id, show: true };
+    const _notify = { id: id, show: true, ...notification };
     dispatch(pushNotification(_notify));
   };
+
+  const componentWillUnmount = () => {
+    dispatch(clearNotifications());
+  };
+
+  useEffect(() => {
+    return componentWillUnmount;
+  }, []);
 
   return { notifications, showNotification };
 };

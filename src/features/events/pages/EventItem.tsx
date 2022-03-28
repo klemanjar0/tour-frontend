@@ -1,10 +1,11 @@
 import React from 'react';
 import { Card, Stack, Button } from 'react-bootstrap';
 import { TransformedEvent } from '../types';
-import { labels } from '../../constants';
+import { labels, PAGE } from '../../constants';
 import { getEventStatus } from '../utils';
 import { useAppDispatch } from '../../store/hooks';
 import { openEventView } from '../slice';
+import { useNavigate } from 'react-router-dom';
 
 interface Props {
   event: TransformedEvent;
@@ -15,13 +16,15 @@ const EventItem: React.FC<Props> = (props) => {
   const status = getEventStatus(event.status);
 
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const setEventView = () => {
     dispatch(openEventView(event));
+    navigate(`../${PAGE.MANAGE_EVENT}`);
   };
 
   return (
-    <Card style={{ width: '100%' }}>
+    <Card style={{ width: '100%', marginBottom: 2 }}>
       <Card.Body>
         <Card.Title>
           <Stack

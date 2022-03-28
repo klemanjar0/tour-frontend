@@ -7,6 +7,9 @@ export const PAGE = {
   REGISTER: 'register',
   PROFILE: 'profile',
   EVENTS: 'events',
+  CREATE_EVENT: 'create_new_event',
+  MY_EVENTS: 'my_events',
+  MANAGE_EVENT: 'view_event',
 };
 
 export const labels = {
@@ -27,6 +30,8 @@ export const labels = {
   },
   event: {
     manage: 'Manage Event',
+    noEvents: 'No events',
+    create: 'Establish new event',
   },
   profile: {
     role: 'Service role',
@@ -36,6 +41,7 @@ export const labels = {
   common: {
     save: 'Save',
     cancel: 'Cancel',
+    back: 'Back',
   },
 };
 

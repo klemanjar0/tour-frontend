@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useMemo } from 'react';
 import { Notification } from '../NotificationService';
 import { ToastContainer, Toast } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
@@ -11,15 +11,18 @@ interface Props {
 
 const NotificationProvider: React.FC<Props> = (props) => {
   const dispatch = useAppDispatch();
+
   const notifications = useSelector(
     (state: RootState) => state.notifications.activeNotifications,
   );
   const { children } = props;
 
+  const data = useMemo(() => notifications, [notifications]);
+
   const removeItem = (id: number) => () => {
     dispatch(hideNotification(id));
     setTimeout(() => {
-      removeNotification(id);
+      dispatch(removeNotification(id));
     }, 500);
   };
 
@@ -45,8 +48,8 @@ const NotificationProvider: React.FC<Props> = (props) => {
   return (
     <>
       {children}
-      <ToastContainer className="p-3" position="top-end">
-        {notifications.map(renderItem)}
+      <ToastContainer className="p-3 position-absolute" position="top-end">
+        {data.map(renderItem)}
       </ToastContainer>
     </>
   );
