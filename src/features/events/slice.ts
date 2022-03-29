@@ -1,9 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IEvent, TransformedEvent } from './types';
+import { EventFilters, IEvent, TransformedEvent } from './types';
 
 export interface EventsState {
   myEvents: TransformedEvent[];
   selectedEventId?: number;
+  filters?: EventFilters;
   eventView?: TransformedEvent;
   fetching: boolean;
   error?: string;

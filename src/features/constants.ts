@@ -32,6 +32,7 @@ export const labels = {
     manage: 'Manage Event',
     noEvents: 'No events',
     create: 'Establish new event',
+    onlyMy: 'Show only me-created events',
   },
   profile: {
     role: 'Service role',
@@ -42,6 +43,7 @@ export const labels = {
     save: 'Save',
     cancel: 'Cancel',
     back: 'Back',
+    filters: 'Filters',
   },
 };
 

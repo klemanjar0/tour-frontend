@@ -56,3 +56,11 @@ export interface TransformedEvent {
   myRole?: EventRoles;
   isActive?: boolean;
 }
+
+export interface EventFilters {
+  roleLevel: EventRoles;
+  country: string;
+  prizeMin: number;
+  prizeMax: number;
+  status: EventStatuses;
+}

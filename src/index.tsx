@@ -13,13 +13,13 @@ import NotificationProvider from './features/notifications/pages/NotificationPro
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <BrowserRouter>
-        <GlobalSpinner>
-          <NotificationProvider>
+      <NotificationProvider>
+        <BrowserRouter>
+          <GlobalSpinner>
             <AppRouter />
-          </NotificationProvider>
-        </GlobalSpinner>
-      </BrowserRouter>
+          </GlobalSpinner>
+        </BrowserRouter>
+      </NotificationProvider>
     </Provider>
   </React.StrictMode>,
   document.getElementById('root'),
