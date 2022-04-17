@@ -1,11 +1,5 @@
 import { call, put, takeLatest, select, all } from 'redux-saga/effects';
-import {
-  buildHeaders,
-  callApi,
-  callApiWithImage,
-  ENDPOINT,
-  setHeaders,
-} from '../api';
+import { buildHeaders, callApi, callApiWithImage, ENDPOINT } from '../api';
 import { RootState } from '../store';
 import {
   loginRequest,
@@ -17,11 +11,14 @@ import {
   passwordChangeRequest,
   passwordChangeSuccess,
   passwordChangeFailed,
+  logout,
+  clear,
 } from './slice';
 import { setBackRoute } from '../router/slice';
 import { PAGE } from '../constants';
 import { appendImageURL } from './utils';
 import { updateProfileSyncActionTime } from '../syncConnector/slice';
+import NetworkService from '../api/NetworkService';
 
 export function* loginUserSaga({ payload }: any): any {
   try {
@@ -40,7 +37,7 @@ export function* loginUserSaga({ payload }: any): any {
     yield put(setBackRoute(PAGE.HOME));
     const authHeader = response.authToken;
 
-    yield call(setHeaders, { authToken: authHeader });
+    yield call(NetworkService.setDefaultHeaders, { authToken: authHeader });
     const withImage = appendImageURL(response);
     yield put(loginSuccess(withImage));
   } catch (e: any) {
@@ -90,10 +87,16 @@ export function* changePasswordSaga({ payload }: any): any {
   }
 }
 
+export function* onLogout(): any {
+  yield put(setBackRoute('/'));
+  yield put(clear());
+}
+
 export default function* root() {
   yield all([
     takeLatest(loginRequest, loginUserSaga),
     takeLatest(registerRequest, registerUserSaga),
     takeLatest(passwordChangeRequest, changePasswordSaga),
+    takeLatest(logout, onLogout),
   ]);
 }

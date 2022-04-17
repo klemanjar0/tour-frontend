@@ -6,27 +6,41 @@ import {
   myEventFailed,
   myEventRequest,
   myEventSuccess,
+  setMaxEventPrize,
 } from './slice';
 import { RootState } from '../store';
 import { buildHeaders, callApi, ENDPOINT } from '../api';
-import { transformEvents } from './utils';
+import { buildEventsJson, transformEvents } from './utils';
 import { IEvent } from './types';
-import { updateEventsSyncActionTime } from "../syncConnector/slice";
+import { updateEventsSyncActionTime } from '../syncConnector/slice';
 
 export function* fetchMyEventsSaga(): any {
   try {
     const state: RootState = yield select();
-    const json = {
-      start: 0,
-      limit: -1,
-    };
+    const json = buildEventsJson();
+
     const response = yield call(
       callApi,
       ENDPOINT.MY_EVENTS,
       buildHeaders(state, json),
     );
     const transformed = transformEvents(response);
+    yield call(fetchMaxPrizeFund);
     yield put(myEventSuccess(transformed));
+  } catch (e: any) {
+    yield put(myEventFailed(e.message as string));
+  }
+}
+
+export function* fetchMaxPrizeFund(): any {
+  try {
+    const state: RootState = yield select();
+    const response = yield call(
+      callApi,
+      ENDPOINT.MAX_EVENTS_PRIZE_FUND,
+      buildHeaders(state, {}),
+    );
+    yield put(setMaxEventPrize(response));
   } catch (e: any) {
     yield put(myEventFailed(e.message as string));
   }

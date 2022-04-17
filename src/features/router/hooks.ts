@@ -12,6 +12,10 @@ export const useObservableRouter = () => {
   const backRoute = useAppSelector(
     (state: RootState) => state.router.backRoute,
   );
+  const currentRoute = useAppSelector(
+    (state: RootState) => state.router.currentRoute,
+  );
+
   useEffect(() => {
     if (backRoute !== null) {
       navigate(backRoute, { replace: true });
@@ -20,6 +24,8 @@ export const useObservableRouter = () => {
   }, [backRoute]);
 
   useEffect(() => {
-    dispatch(setCurrentRoute(location.pathname));
+    if (currentRoute !== location.pathname) {
+      dispatch(setCurrentRoute(location.pathname));
+    }
   }, [location]);
 };

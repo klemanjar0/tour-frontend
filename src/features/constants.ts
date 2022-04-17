@@ -50,21 +50,40 @@ export const labels = {
 export const dateToString = (date: number | Date) =>
   moment(date).format('hh:mm:ss');
 
+const appendNotifyId = (date: number | Date) => ({
+  id: Number(date),
+  show: true,
+});
+
 export const notifications = {
   passwordChanged: (date: number | Date) => ({
     title: 'Password change',
     body: 'Password has been successfully changed',
     date: dateToString(date),
+    ...appendNotifyId(date),
   }),
   featureLocked: (date: number | Date) => ({
     title: 'Error',
     body: 'Feature is currently unavailable',
     date: dateToString(date),
+    ...appendNotifyId(date),
+  }),
+  tokenExpired: (date: number | Date) => ({
+    title: 'Token has been expired',
+    body: 'Your token has been expired. Login again.',
+    date: dateToString(date),
+    ...appendNotifyId(date),
+  }),
+  defaultError: (date: number | Date, description: string) => ({
+    title: 'Error',
+    body: description,
+    date: dateToString(date),
+    ...appendNotifyId(date),
   }),
 };
 
 export const EventStatus = {
-  0: 'Not started yet',
+  0: "Hasn't started yet",
   1: 'Registration started',
   2: 'Registration finished',
   4: 'Event in progress',

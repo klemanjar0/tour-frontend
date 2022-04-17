@@ -1,3 +1,7 @@
+export enum ErrorCode {
+  tokenExpired = 504,
+}
+
 class ErrorService {
   private errors: Record<number, string>;
 

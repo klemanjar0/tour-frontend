@@ -7,7 +7,6 @@ import { centerFlex, spinnerStyle } from '../../auth/pages/styles';
 import EventItem from './EventItem';
 import { TransformedEvent } from '../types';
 import { labels, PAGE } from '../../constants';
-import { useNavigate } from 'react-router-dom';
 import EventFilters from './EventFilters';
 
 const MyEventsList = () => {
@@ -45,7 +44,7 @@ const MyEventsList = () => {
               </div>
             )}
             {!!events.length && !fetching ? (
-              <div className="mt-1">{events.map(renderItem)}</div>
+              <div className="mb-1">{events.map(renderItem)}</div>
             ) : (
               <Card body style={centerFlex}>
                 {labels.event.noEvents}

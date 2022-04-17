@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { FaChevronLeft } from 'react-icons/fa';
 import { EventRoles } from '../types';
+import { getEventStatus } from '../utils';
 
 const EventManager = () => {
   const dispatch = useAppDispatch();
@@ -28,6 +29,7 @@ const EventManager = () => {
     return onBack;
   }, []);
 
+  const status = getEventStatus(event?.status);
   return (
     <div>
       <Card body className="mt-3">
@@ -43,6 +45,16 @@ const EventManager = () => {
           <h3 className="mx-3">{event?.title}</h3>
         </div>
         <hr />
+        <div>
+          <span>Type: {event?.type}</span> <br />
+          <span>Country: {event?.country}</span> <br />
+          <span>Prize: {event?.prizeFund}$</span> <br />
+          <span>Status: {status}</span> <br />
+        </div>
+        <hr />
+        <div>
+          <span>Description: {event?.description}</span>
+        </div>
       </Card>
     </div>
   );

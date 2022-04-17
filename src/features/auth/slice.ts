@@ -17,6 +17,8 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
+    logout: (state) => state,
+
     clear: (state: AuthState) => {
       state.profile = undefined;
       state.authToken = undefined;
@@ -81,6 +83,7 @@ const authSlice = createSlice({
 
 export const {
   clear,
+  logout,
   loginRequest,
   loginSuccess,
   loginFailed,

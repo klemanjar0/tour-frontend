@@ -3,7 +3,7 @@ import { Container, NavDropdown, Badge } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { RootState } from '../../store';
-import { clear } from '../../auth/slice';
+import { clear, logout } from '../../auth/slice';
 import { labels, PAGE } from '../../constants';
 import { linkStyle, linkStyleRed } from '../../styles';
 import { FaSignOutAlt, FaBell } from 'react-icons/fa';
@@ -13,7 +13,6 @@ interface Props {
 }
 
 const ProfileBadge: React.FC<Props> = (params) => {
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   const { isAuthorized } = params;
@@ -26,9 +25,9 @@ const ProfileBadge: React.FC<Props> = (params) => {
   );
 
   const logOutUser = () => {
-    dispatch(clear());
-    navigate(PAGE.HOME, { replace: true });
+    dispatch(logout());
   };
+
   return (
     <Container className="d-flex flex-row justify-content-center align-items-center">
       {isAuthorized ? (

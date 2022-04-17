@@ -3,8 +3,14 @@ import map from 'lodash/map';
 import { RootState } from '../store';
 import ErrorService from './errorService';
 import { isInstanceOfHTTPError } from './utils';
+import { HttpStatus } from '../utils/http-status-codes';
+import DispatchService from '../store/DispatchService';
+import { clear as logout } from '../auth/slice';
+import { pushNotification } from '../notifications/slice';
+import { notifications } from '../constants';
+import NetworkService from './NetworkService';
 
-export const server = 'http://192.168.1.103:4000/'; //'http://192.168.1.103:4000/'
+export const server = 'http://localhost:4000/'; //'http://192.168.1.103:4000/'
 
 export const ENDPOINT = {
   REGISTER: 'auth/register',
@@ -12,6 +18,7 @@ export const ENDPOINT = {
   INITIALIZE_ADMIN: 'auth/initialize_admin',
   ERROR_CODES: 'error-codes',
   MY_EVENTS: 'events/myEvents',
+  MAX_EVENTS_PRIZE_FUND: 'events/getMaxPrize',
   UPLOAD_FILE: 'upload-file',
   GET_FILE: (fileId: number) => `file/${fileId}`,
   UPDATE_PASSWORD: 'user-manage/update-password',
@@ -20,17 +27,9 @@ export const ENDPOINT = {
 
 export const withServer = (endpoint: string) => `${server}${endpoint}`;
 
-const instance = axios.create();
-
 export interface Headers {
   authToken: string;
 }
-
-export const setHeaders = (headers: Headers) => {
-  map(headers, (value: string, key: string) => {
-    instance.defaults.headers.common[key] = value;
-  });
-};
 
 export const buildHeaders = (state: RootState, data: any, method = 'POST') => {
   const authToken = state.auth.authToken;
@@ -52,7 +51,7 @@ export const callApiWithImage = async (file: any) => {
 
   formData.append('file', file);
 
-  const response = await instance.post(
+  const response = await NetworkService.request.post(
     withServer(ENDPOINT.UPLOAD_FILE),
     formData,
     {
@@ -67,12 +66,7 @@ export const callApiWithImage = async (file: any) => {
 
 export const callApi = async (url: string, options: any) => {
   const finalEndpoint = withServer(url);
-  const response = await instance(finalEndpoint, options);
-
-  if (isInstanceOfHTTPError(response.data)) {
-    throw new Error(ErrorService.getErrorDescription(response.data.errorCode));
-  }
-
+  const response = await NetworkService.request(finalEndpoint, options);
   return response.data;
 };
 

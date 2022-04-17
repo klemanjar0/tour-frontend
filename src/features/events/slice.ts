@@ -5,6 +5,7 @@ export interface EventsState {
   myEvents: TransformedEvent[];
   selectedEventId?: number;
   filters?: EventFilters;
+  maxEventPrize?: number;
   eventView?: TransformedEvent;
   fetching: boolean;
   error?: string;
@@ -37,6 +38,9 @@ const eventsSlice = createSlice({
     },
     clearEventView: (state: EventsState) => {
       state.eventView = undefined;
+    },
+    setMaxEventPrize: (state: EventsState, action: PayloadAction<number>) => {
+      state.maxEventPrize = action.payload;
     },
 
     myEventRequest: (state: EventsState) => {
@@ -77,6 +81,7 @@ export const {
   myEventFailed,
   selectEvent,
   clearSelectionEvent,
+  setMaxEventPrize,
   openEventView,
   clearEventView,
   createEventRequest,

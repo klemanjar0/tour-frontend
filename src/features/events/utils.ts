@@ -3,6 +3,11 @@ import map from 'lodash/map';
 import head from 'lodash/head';
 import { EventStatus } from '../constants';
 
+export const buildEventsJson = () => ({
+  start: 0,
+  limit: -1,
+});
+
 export const transformEvents = (events: IEvent[]): TransformedEvent[] => {
   return (
     map(events, (event: IEvent) => {
@@ -25,6 +30,6 @@ export const transformEvents = (events: IEvent[]): TransformedEvent[] => {
   );
 };
 
-export const getEventStatus = (status: EventStatuses) => {
-  return EventStatus[status];
+export const getEventStatus = (status?: EventStatuses) => {
+  return status ? EventStatus[status] : '';
 };
