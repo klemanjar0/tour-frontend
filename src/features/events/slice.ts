@@ -3,6 +3,10 @@ import { EventFilters, IEvent, TransformedEvent } from './types';
 
 export interface EventsState {
   myEvents: TransformedEvent[];
+  assets: {
+    users?: string[];
+    fetching: boolean;
+  };
   selectedEventId?: number;
   filters?: EventFilters;
   maxEventPrize?: number;
@@ -14,6 +18,9 @@ export interface EventsState {
 const initialState: EventsState = {
   myEvents: [],
   fetching: false,
+  assets: {
+    fetching: false,
+  },
 };
 
 const eventsSlice = createSlice({
@@ -71,6 +78,35 @@ const eventsSlice = createSlice({
       state.fetching = false;
       state.error = action.payload;
     },
+
+    fetchUsernamesRequest: (state: EventsState, { payload }) => {
+      state.assets.fetching = true;
+      state.error = undefined;
+    },
+    fetchUsernamesSuccess: (
+      state: EventsState,
+      action: PayloadAction<string[]>,
+    ) => {
+      state.assets.fetching = false;
+      state.error = undefined;
+      state.assets.users = action.payload;
+    },
+    fetchUsernamesFailed: (
+      state: EventsState,
+      action: PayloadAction<string>,
+    ) => {
+      state.assets.fetching = false;
+      state.error = action.payload;
+    },
+
+    inviteUserRequest: (state: EventsState, { payload }) => {
+      state.fetching = true;
+      state.error = undefined;
+    },
+    inviteUserSuccess: (state: EventsState) => {
+      state.fetching = false;
+      state.error = undefined;
+    },
   },
 });
 
@@ -87,5 +123,10 @@ export const {
   createEventRequest,
   createEventSuccess,
   createEventFailed,
+  fetchUsernamesRequest,
+  fetchUsernamesFailed,
+  fetchUsernamesSuccess,
+  inviteUserRequest,
+  inviteUserSuccess,
 } = eventsSlice.actions;
 export default eventsSlice.reducer;

@@ -3,6 +3,11 @@ import {
   createEventFailed,
   createEventRequest,
   createEventSuccess,
+  fetchUsernamesFailed,
+  fetchUsernamesRequest,
+  fetchUsernamesSuccess,
+  inviteUserRequest,
+  inviteUserSuccess,
   myEventFailed,
   myEventRequest,
   myEventSuccess,
@@ -13,6 +18,8 @@ import { buildHeaders, callApi, ENDPOINT } from '../api';
 import { buildEventsJson, transformEvents } from './utils';
 import { IEvent } from './types';
 import { updateEventsSyncActionTime } from '../syncConnector/slice';
+import { pushNotification } from '../notifications/slice';
+import { notifications } from '../constants';
 
 export function* fetchMyEventsSaga(): any {
   try {
@@ -61,9 +68,46 @@ export function* createEventSaga({
   }
 }
 
+export function* fetchUsernamesSaga({ payload }: { payload: string }): any {
+  try {
+    const state: RootState = yield select();
+    const data = {
+      query: payload,
+    };
+    const usernames = yield call(
+      callApi,
+      ENDPOINT.FETCH_USERNAMES,
+      buildHeaders(state, data),
+    );
+    yield put(fetchUsernamesSuccess(usernames));
+  } catch (e: any) {
+    yield put(fetchUsernamesFailed(e.message as string));
+  }
+}
+
+export function* inviteUserSaga({ payload }: { payload: string }): any {
+  try {
+    const state: RootState = yield select();
+    const eventId = state.events?.eventView?.id;
+
+    const data = {
+      username: payload,
+      eventId: eventId,
+    };
+    yield call(callApi, ENDPOINT.INVITE_USER, buildHeaders(state, data));
+    yield put(inviteUserSuccess());
+  } catch (e: any) {
+    yield put(
+      pushNotification(notifications.inviteError(Date.now(), e.message)),
+    );
+  }
+}
+
 export default function* root() {
   yield all([
     takeLatest(myEventRequest, fetchMyEventsSaga),
     takeLatest(createEventRequest, createEventSaga),
+    takeLatest(fetchUsernamesRequest, fetchUsernamesSaga),
+    takeLatest(inviteUserRequest, inviteUserSaga),
   ]);
 }

@@ -11,6 +11,8 @@ import { notifications } from '../constants';
 import NetworkService from './NetworkService';
 
 export const server = 'http://localhost:4000/'; //'http://192.168.1.103:4000/'
+export const socketServer = 'http://localhost:80/';
+export const origin = 'http://localhost:3000/';
 
 export const ENDPOINT = {
   REGISTER: 'auth/register',
@@ -23,6 +25,8 @@ export const ENDPOINT = {
   GET_FILE: (fileId: number) => `file/${fileId}`,
   UPDATE_PASSWORD: 'user-manage/update-password',
   CREATE_EVENT: 'events/create',
+  FETCH_USERNAMES: 'user-manage/findUserNames',
+  INVITE_USER: 'invites/inviteUserToEvent',
 };
 
 export const withServer = (endpoint: string) => `${server}${endpoint}`;

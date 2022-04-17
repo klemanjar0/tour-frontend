@@ -80,6 +80,18 @@ export const notifications = {
     date: dateToString(date),
     ...appendNotifyId(date),
   }),
+  inviteError: (date: number | Date, description: string) => ({
+    title: 'Error',
+    body: description,
+    date: dateToString(date),
+    ...appendNotifyId(date),
+  }),
+  newInvite: (date: number | Date) => ({
+    title: 'Invite',
+    body: 'You have been invited to a new event.',
+    date: dateToString(date),
+    ...appendNotifyId(date),
+  }),
 };
 
 export const EventStatus = {

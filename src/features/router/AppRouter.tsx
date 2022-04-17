@@ -14,6 +14,7 @@ import Profile from '../profile/pages/Profile';
 import CreateEvent from '../events/pages/CreateEvent';
 import MyEventsList from '../events/pages/MyEventsList';
 import EventManager from '../events/pages/EventManager';
+import { useAuthedSocket } from '../socket/hooks';
 
 const unAuthorizedPages: React.ReactElement[] = [
   <Route
@@ -51,6 +52,7 @@ const authorizedPages: React.ReactElement[] = [
 
 const AppRouter = () => {
   useObservableRouter();
+  useAuthedSocket();
 
   const isAuthorized = useAppSelector(
     (state: RootState) => !!state.auth?.profile?.id,
