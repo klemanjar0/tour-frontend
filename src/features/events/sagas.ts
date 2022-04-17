@@ -3,6 +3,9 @@ import {
   createEventFailed,
   createEventRequest,
   createEventSuccess,
+  fetchEventUsersFailed,
+  fetchEventUsersRequest,
+  fetchEventUsersSuccess,
   fetchUsernamesFailed,
   fetchUsernamesRequest,
   fetchUsernamesSuccess,
@@ -15,7 +18,7 @@ import {
 } from './slice';
 import { RootState } from '../store';
 import { buildHeaders, callApi, ENDPOINT } from '../api';
-import { buildEventsJson, transformEvents } from './utils';
+import { buildEventsJson, transformEvents, transformUsers } from './utils';
 import { IEvent } from './types';
 import { updateEventsSyncActionTime } from '../syncConnector/slice';
 import { pushNotification } from '../notifications/slice';
@@ -96,10 +99,31 @@ export function* inviteUserSaga({ payload }: { payload: string }): any {
     };
     yield call(callApi, ENDPOINT.INVITE_USER, buildHeaders(state, data));
     yield put(inviteUserSuccess());
+    yield put(pushNotification(notifications.invitedSuccessfully(Date.now())));
   } catch (e: any) {
     yield put(
       pushNotification(notifications.inviteError(Date.now(), e.message)),
     );
+  }
+}
+
+export function* fetchEventUsersSaga(): any {
+  try {
+    const state: RootState = yield select();
+    const eventId = state.events?.eventView?.id;
+
+    const data = {
+      eventId: eventId,
+    };
+    if (!eventId) throw new Error();
+    const users = yield call(
+      callApi,
+      ENDPOINT.EVENT_USERS,
+      buildHeaders(state, data),
+    );
+    yield put(fetchEventUsersSuccess(transformUsers(users)));
+  } catch (e: any) {
+    yield put(fetchEventUsersFailed(e.message as string));
   }
 }
 
@@ -109,5 +133,6 @@ export default function* root() {
     takeLatest(createEventRequest, createEventSaga),
     takeLatest(fetchUsernamesRequest, fetchUsernamesSaga),
     takeLatest(inviteUserRequest, inviteUserSaga),
+    takeLatest(fetchEventUsersRequest, fetchEventUsersSaga),
   ]);
 }

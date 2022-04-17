@@ -15,6 +15,8 @@ import CreateEvent from '../events/pages/CreateEvent';
 import MyEventsList from '../events/pages/MyEventsList';
 import EventManager from '../events/pages/EventManager';
 import { useAuthedSocket } from '../socket/hooks';
+import Invites from '../invites/pages/Invites';
+import useOnStartUp from '../utils/useOnStartup';
 
 const unAuthorizedPages: React.ReactElement[] = [
   <Route
@@ -48,11 +50,17 @@ const authorizedPages: React.ReactElement[] = [
     path={PAGE.PROFILE}
     element={<Profile />}
   />,
+  <Route
+    key={`page_${PAGE.INVITES}`}
+    path={PAGE.INVITES}
+    element={<Invites />}
+  />,
 ];
 
 const AppRouter = () => {
   useObservableRouter();
   useAuthedSocket();
+  useOnStartUp();
 
   const isAuthorized = useAppSelector(
     (state: RootState) => !!state.auth?.profile?.id,

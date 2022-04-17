@@ -4,6 +4,7 @@ import eventsReducer from '../events/slice';
 import spinnerReducer from '../spinner/slice';
 import syncReducer from '../syncConnector/slice';
 import notificationReducer from '../notifications/slice';
+import invitesReducer from '../invites/slice';
 import { combineReducers } from 'redux';
 
 const rootReducer = {
@@ -13,6 +14,7 @@ const rootReducer = {
   spinner: spinnerReducer,
   sync: syncReducer,
   notifications: notificationReducer,
+  invites: invitesReducer,
 };
 
 export default rootReducer;

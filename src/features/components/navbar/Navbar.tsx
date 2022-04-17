@@ -12,6 +12,9 @@ const CustomNavbar = () => {
   const isAuthorized = useAppSelector(
     (state: RootState) => !!state.auth.profile?.id,
   );
+  const activeInvites = useAppSelector(
+    (state: RootState) => state.invites.invites,
+  );
 
   return (
     <Navbar bg="light" variant="light">
@@ -22,7 +25,9 @@ const CustomNavbar = () => {
               {labels.navbar.title}
             </Link>
           </Navbar.Brand>
-          {isAuthorized && <NavbarItems />}
+          {isAuthorized && (
+            <NavbarItems activeInvitesCount={activeInvites.length} />
+          )}
         </div>
         <div className="d-flex flex-row align-items-center">
           <ProfileBadge isAuthorized={isAuthorized} />

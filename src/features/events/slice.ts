@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { EventFilters, IEvent, TransformedEvent } from './types';
+import { IUser } from '../auth/types';
 
 export interface EventsState {
   myEvents: TransformedEvent[];
@@ -11,6 +12,10 @@ export interface EventsState {
   filters?: EventFilters;
   maxEventPrize?: number;
   eventView?: TransformedEvent;
+  eventViewAssets: {
+    users?: IUser[];
+    fetching: boolean;
+  };
   fetching: boolean;
   error?: string;
 }
@@ -19,6 +24,9 @@ const initialState: EventsState = {
   myEvents: [],
   fetching: false,
   assets: {
+    fetching: false,
+  },
+  eventViewAssets: {
     fetching: false,
   },
 };
@@ -45,6 +53,8 @@ const eventsSlice = createSlice({
     },
     clearEventView: (state: EventsState) => {
       state.eventView = undefined;
+      state.eventViewAssets.fetching = false;
+      state.eventViewAssets.users = [];
     },
     setMaxEventPrize: (state: EventsState, action: PayloadAction<number>) => {
       state.maxEventPrize = action.payload;
@@ -107,6 +117,26 @@ const eventsSlice = createSlice({
       state.fetching = false;
       state.error = undefined;
     },
+
+    fetchEventUsersRequest: (state: EventsState, { payload }) => {
+      state.eventViewAssets.fetching = true;
+      state.error = undefined;
+    },
+    fetchEventUsersSuccess: (
+      state: EventsState,
+      action: PayloadAction<IUser[]>,
+    ) => {
+      state.eventViewAssets.fetching = false;
+      state.error = undefined;
+      state.eventViewAssets.users = action.payload;
+    },
+    fetchEventUsersFailed: (
+      state: EventsState,
+      action: PayloadAction<string>,
+    ) => {
+      state.eventViewAssets.fetching = false;
+      state.error = action.payload;
+    },
   },
 });
 
@@ -128,5 +158,8 @@ export const {
   fetchUsernamesSuccess,
   inviteUserRequest,
   inviteUserSuccess,
+  fetchEventUsersRequest,
+  fetchEventUsersFailed,
+  fetchEventUsersSuccess,
 } = eventsSlice.actions;
 export default eventsSlice.reducer;

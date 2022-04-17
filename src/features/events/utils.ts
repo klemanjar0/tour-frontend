@@ -2,6 +2,7 @@ import { EventStatuses, IEvent, TransformedEvent } from './types';
 import map from 'lodash/map';
 import head from 'lodash/head';
 import { EventStatus } from '../constants';
+import { IUser } from '../auth/types';
 
 export const buildEventsJson = () => ({
   start: 0,
@@ -28,6 +29,18 @@ export const transformEvents = (events: IEvent[]): TransformedEvent[] => {
       };
     }) || ([] as TransformedEvent[])
   );
+};
+
+export const transformUsers = (users: any[]) => {
+  return map(users, (user) => {
+    const eventRole = user?.EventToUser?.role;
+    const isActive = user?.EventToUser?.isActive;
+    return {
+      ...user,
+      eventRole,
+      isActive,
+    };
+  });
 };
 
 export const getEventStatus = (status?: EventStatuses) => {

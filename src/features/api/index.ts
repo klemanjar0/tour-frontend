@@ -27,6 +27,10 @@ export const ENDPOINT = {
   CREATE_EVENT: 'events/create',
   FETCH_USERNAMES: 'user-manage/findUserNames',
   INVITE_USER: 'invites/inviteUserToEvent',
+  EVENT_USERS: 'events/getEventUsers',
+  MY_INVITES: 'invites/myInvites',
+  DECLINE_INVITE: 'invites/decline',
+  ACCEPT_INVITE: 'invites/accept',
 };
 
 export const withServer = (endpoint: string) => `${server}${endpoint}`;

@@ -10,6 +10,7 @@ export const PAGE = {
   CREATE_EVENT: 'create_new_event',
   MY_EVENTS: 'my_events',
   MANAGE_EVENT: 'view_event',
+  INVITES: 'invites',
 };
 
 export const labels = {
@@ -19,6 +20,7 @@ export const labels = {
     register: 'Registration',
     logout: 'Sign Out',
     events: 'Events',
+    invites: 'Invites',
   },
   login: {
     signIn: 'Sign In',
@@ -92,6 +94,24 @@ export const notifications = {
     date: dateToString(date),
     ...appendNotifyId(date),
   }),
+  invitedSuccessfully: (date: number | Date) => ({
+    title: 'Invite',
+    body: 'Invite sent.',
+    date: dateToString(date),
+    ...appendNotifyId(date),
+  }),
+  invitedDeclineError: (date: number | Date) => ({
+    title: 'Invite decline error.',
+    body: 'Error during declining error.',
+    date: dateToString(date),
+    ...appendNotifyId(date),
+  }),
+  invitedAcceptError: (date: number | Date) => ({
+    title: 'Invite accept error.',
+    body: 'Error during accepting error.',
+    date: dateToString(date),
+    ...appendNotifyId(date),
+  }),
 };
 
 export const EventStatus = {
@@ -109,4 +129,12 @@ export const UserRole = {
   200: 'Editor',
   400: 'Admin',
   500: 'Super admin',
+};
+
+export const UserRoleColor: { [key in string]: string } = {
+  '1': 'secondary',
+  '100': 'secondary',
+  '200': 'primary',
+  '400': 'success',
+  '500': 'success',
 };

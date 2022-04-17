@@ -5,6 +5,7 @@ import { socketActions } from './constants';
 import { Socket } from 'socket.io-client';
 import { pushNotification } from '../notifications/slice';
 import { notifications } from '../constants';
+import { updateInvitesSyncActionTime } from '../syncConnector/slice';
 
 const socketChannel = function (socket: Socket) {
   return eventChannel((emit) => {
@@ -28,6 +29,11 @@ const socketChannel = function (socket: Socket) {
   });
 };
 
+export const inviteHandler = function* (): any {
+  yield put(pushNotification(notifications.newInvite(Date.now())));
+  yield put(updateInvitesSyncActionTime(Date.now()));
+};
+
 export const watchSocket = function* (): any {
   const channel = yield call(socketChannel, configuredSocket);
 
@@ -35,7 +41,7 @@ export const watchSocket = function* (): any {
     const payload = yield take(channel);
     console.log(payload);
     if (payload.type === socketActions.invite) {
-      yield put(pushNotification(notifications.newInvite(Date.now())));
+      yield call(inviteHandler);
     }
   }
 };

@@ -3,13 +3,16 @@ import {
   Button,
   Card,
   CloseButton,
+  Col,
   Container,
   Form,
+  Row,
   Spinner,
 } from 'react-bootstrap';
 import { useAppDispatch } from '../../store/hooks';
 import {
   clearEventView,
+  fetchEventUsersRequest,
   fetchUsernamesRequest,
   inviteUserRequest,
 } from '../slice';
@@ -24,6 +27,7 @@ import useDebouncedOnChange from '../../utils/useDebouncedOnChange';
 import useComponentDidUpdate from '../../utils/hooks';
 import map from 'lodash/map';
 import { spinnerStyle } from '../../auth/pages/styles';
+import EventUserCard from './EventUserCard';
 
 const EventManager = () => {
   const dispatch = useAppDispatch();
@@ -31,12 +35,20 @@ const EventManager = () => {
   const [text, setText] = useState('');
   const [query, setQuery] = useState('');
   const [debouncedChange] = useDebouncedOnChange({ onChange: setQuery });
-
+  const myId = useSelector((state: RootState) => state.auth?.profile?.id);
   const event = useSelector((state: RootState) => state.events.eventView);
   const users = useSelector((state: RootState) => state.events.assets.users);
   const usersFetching = useSelector(
     (state: RootState) => state.events.assets.fetching,
   );
+
+  const eventUsers = useSelector(
+    (state: RootState) => state.events.eventViewAssets.users,
+  );
+  const eventUsersFetching = useSelector(
+    (state: RootState) => state.events.eventViewAssets.fetching,
+  );
+
   const isUserAdminOnEvent = useSelector(
     (state: RootState) =>
       (state.events?.eventView?.myRole || 0) >= EventRoles.OWNER,
@@ -58,6 +70,9 @@ const EventManager = () => {
   };
 
   useEffect(() => {
+    if (event?.id) {
+      dispatch(fetchEventUsersRequest({}));
+    }
     return onBack;
   }, []);
 
@@ -85,53 +100,80 @@ const EventManager = () => {
           <span>Type: {event?.type}</span> <br />
           <span>Country: {event?.country}</span> <br />
           <span>Prize: {event?.prizeFund}$</span> <br />
-          <span>Status: {status}</span> <br />
         </div>
         <hr />
         <div>
           <span>Description: {event?.description}</span>
         </div>
         <hr />
-        <div>
-          <h5>Invite a user</h5>
-          <Form>
-            <Form.Control
-              value={text}
-              onChange={onTextChange}
-              type="text"
-              placeholder="Type username.."
-            />
-          </Form>
-          {users?.length ? (
-            <div style={{ overflowY: 'scroll', height: '200px' }}>
-              {!usersFetching ? (
-                <div style={{ marginTop: 5 }}>
-                  {map(users, (user, idx) => {
-                    return (
-                      <Card
-                        key={`${user}${idx}`}
-                        style={{
-                          padding: 10,
-                          margin: 2,
-                          display: 'flex',
-                          flexDirection: 'row',
-                          justifyContent: 'space-between',
-                        }}
-                      >
-                        <span>{user}</span>
-                        <Button onClick={() => inviteUser(user)}>Invite</Button>
-                      </Card>
-                    );
-                  })}
-                </div>
+        <Row>
+          <Col>
+            <h5>Event Users</h5>
+            <div style={{ overflowY: 'scroll', height: '22rem' }}>
+              {!eventUsersFetching ? (
+                map(eventUsers, (user) => (
+                  <EventUserCard
+                    key={user.username}
+                    user={user}
+                    isMyCard={myId === user.id}
+                  />
+                ))
               ) : (
                 <Spinner style={spinnerStyle} animation={'grow'} />
               )}
             </div>
-          ) : (
-            <div>No users found.</div>
-          )}
-        </div>
+          </Col>
+          <Col>
+            <h5>Invite a user</h5>
+            <Form>
+              <Form.Control
+                value={text}
+                onChange={onTextChange}
+                type="text"
+                placeholder="Type username.."
+              />
+            </Form>
+            {users?.length ? (
+              <div style={{ overflowY: 'scroll', height: '20rem' }}>
+                {!usersFetching ? (
+                  <div style={{ marginTop: 5 }}>
+                    {map(users, (user, idx) => {
+                      return (
+                        <Card
+                          key={`${user}${idx}`}
+                          style={{
+                            padding: 10,
+                            margin: 2,
+                            display: 'flex',
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                          }}
+                        >
+                          <span>{user}</span>
+                          <Button onClick={() => inviteUser(user)}>
+                            Invite
+                          </Button>
+                        </Card>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <Spinner style={spinnerStyle} animation={'grow'} />
+                )}
+              </div>
+            ) : (
+              <div
+                style={{
+                  width: '100%',
+                  marginTop: '2rem',
+                  textAlign: 'center',
+                }}
+              >
+                {query && 'No users found.'}
+              </div>
+            )}
+          </Col>
+        </Row>
       </Card>
     </div>
   );
