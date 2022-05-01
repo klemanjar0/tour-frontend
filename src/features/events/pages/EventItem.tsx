@@ -4,7 +4,7 @@ import { TransformedEvent } from '../types';
 import { labels, PAGE } from '../../constants';
 import { getEventStatus } from '../utils';
 import { useAppDispatch } from '../../store/hooks';
-import { openEventView } from '../slice';
+import { getEventRequest } from '../slice';
 import { useNavigate } from 'react-router-dom';
 
 interface Props {
@@ -19,7 +19,7 @@ const EventItem: React.FC<Props> = (props) => {
   const navigate = useNavigate();
 
   const setEventView = () => {
-    dispatch(openEventView(event));
+    dispatch(getEventRequest(event.id));
     navigate(`../${PAGE.MANAGE_EVENT}`);
   };
 

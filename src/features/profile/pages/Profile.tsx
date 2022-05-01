@@ -19,6 +19,7 @@ import { margin } from '../../styles';
 import moment from 'moment/moment';
 import { useNotifications } from '../../notifications/NotificationService';
 import useComponentDidUpdate from '../../utils/hooks';
+import LiqPayForm from '../../liqpay/widget/LiqPayForm';
 
 const initialDataState = {
   oldPassword: '',
@@ -84,7 +85,7 @@ const Profile = () => {
             </Button>
           </Col>
           <Col sm={8}>
-            {`${labels.profile.role}: ${getUserRoleTitle(user?.role ?? 1)}`}
+            <LiqPayForm />
           </Col>
         </Row>
       </Container>

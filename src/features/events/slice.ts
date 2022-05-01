@@ -11,7 +11,11 @@ export interface EventsState {
   selectedEventId?: number;
   filters?: EventFilters;
   maxEventPrize?: number;
-  eventView?: TransformedEvent;
+  eventView: {
+    data?: TransformedEvent;
+    fetching: boolean;
+    error?: string;
+  };
   eventViewAssets: {
     users?: IUser[];
     fetching: boolean;
@@ -23,6 +27,9 @@ export interface EventsState {
 const initialState: EventsState = {
   myEvents: [],
   fetching: false,
+  eventView: {
+    fetching: false,
+  },
   assets: {
     fetching: false,
   },
@@ -49,10 +56,10 @@ const eventsSlice = createSlice({
       state: EventsState,
       action: PayloadAction<TransformedEvent>,
     ) => {
-      state.eventView = action.payload;
+      state.eventView!.data = action.payload;
     },
     clearEventView: (state: EventsState) => {
-      state.eventView = undefined;
+      state.eventView.data = undefined;
       state.eventViewAssets.fetching = false;
       state.eventViewAssets.users = [];
     },
@@ -117,6 +124,23 @@ const eventsSlice = createSlice({
       state.fetching = false;
       state.error = undefined;
     },
+    deleteEventRequest: (state: EventsState, { payload }) => {
+      state.eventView.fetching = true;
+      state.eventView.error = undefined;
+    },
+    deleteEventSuccess: (state: EventsState) => {
+      state.eventView.fetching = false;
+      state.eventView.error = undefined;
+    },
+
+    updateStatusRequest: (state: EventsState, { payload }) => {
+      state.eventView.fetching = true;
+      state.eventView.error = undefined;
+    },
+    updateStatusSuccess: (state: EventsState) => {
+      state.eventView.fetching = false;
+      state.eventView.error = undefined;
+    },
 
     fetchEventUsersRequest: (state: EventsState, { payload }) => {
       state.eventViewAssets.fetching = true;
@@ -136,6 +160,40 @@ const eventsSlice = createSlice({
     ) => {
       state.eventViewAssets.fetching = false;
       state.error = action.payload;
+    },
+    removeUserRequest: (state: EventsState, { payload }) => {
+      state.eventView.fetching = true;
+      state.eventView.error = undefined;
+    },
+    removeUserSuccess: (state: EventsState) => {
+      state.eventView.fetching = false;
+      state.eventView.error = undefined;
+    },
+
+    chooseWinnerRequest: (state: EventsState, { payload }) => {
+      state.eventView.fetching = true;
+      state.eventView.error = undefined;
+    },
+    chooseWinnerSuccess: (state: EventsState) => {
+      state.eventView.fetching = false;
+      state.eventView.error = undefined;
+    },
+
+    getEventRequest: (state: EventsState, { payload }) => {
+      state.eventView.fetching = true;
+      state.eventView.error = undefined;
+    },
+    getEventSuccess: (
+      state: EventsState,
+      action: PayloadAction<TransformedEvent>,
+    ) => {
+      state.eventView.fetching = false;
+      state.eventView.error = undefined;
+      state.eventView.data = action.payload;
+    },
+    getEventFailed: (state: EventsState, action: PayloadAction<string>) => {
+      state.eventView.fetching = false;
+      state.eventView.error = action.payload;
     },
   },
 });
@@ -161,5 +219,16 @@ export const {
   fetchEventUsersRequest,
   fetchEventUsersFailed,
   fetchEventUsersSuccess,
+  removeUserRequest,
+  removeUserSuccess,
+  getEventFailed,
+  getEventRequest,
+  getEventSuccess,
+  deleteEventRequest,
+  deleteEventSuccess,
+  updateStatusRequest,
+  updateStatusSuccess,
+  chooseWinnerRequest,
+  chooseWinnerSuccess,
 } = eventsSlice.actions;
 export default eventsSlice.reducer;

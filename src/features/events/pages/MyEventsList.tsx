@@ -13,6 +13,9 @@ const MyEventsList = () => {
   const dispatch = useAppDispatch();
   const fetching = useAppSelector((state: RootState) => state.events.fetching);
   const events = useAppSelector((state: RootState) => state.events.myEvents);
+  const time = useAppSelector(
+    (state: RootState) => state.sync.eventsSyncActionTime,
+  );
 
   const renderItem = (item: TransformedEvent) => {
     return <EventItem event={item} key={`event_card${item.id}`} />;
@@ -24,7 +27,7 @@ const MyEventsList = () => {
   useEffect(() => {
     dispatch(myEventRequest());
     return onUnmount;
-  }, []);
+  }, [time]);
 
   return (
     <div>

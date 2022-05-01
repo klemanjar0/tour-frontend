@@ -28,9 +28,15 @@ export const ENDPOINT = {
   FETCH_USERNAMES: 'user-manage/findUserNames',
   INVITE_USER: 'invites/inviteUserToEvent',
   EVENT_USERS: 'events/getEventUsers',
+  REMOVE_USER_FROM_EVENT: 'events/removeUserFromEvent',
   MY_INVITES: 'invites/myInvites',
   DECLINE_INVITE: 'invites/decline',
   ACCEPT_INVITE: 'invites/accept',
+  GET_EVENT: (id: number) => `events/get/${id}`,
+  DELETE_EVENT: (id: number) => `events/deleteEvent/${id}`,
+  UPDATE_EVENT_STATUS: 'events/updateStatus',
+  SET_EVENT_WINNER: 'events/setWinner',
+  GET_ACCOUNT: 'balance/get',
 };
 
 export const withServer = (endpoint: string) => `${server}${endpoint}`;

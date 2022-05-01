@@ -1,26 +1,40 @@
 import { all, takeLatest, select, put, call } from 'redux-saga/effects';
 import {
+  chooseWinnerRequest,
+  chooseWinnerSuccess,
   createEventFailed,
   createEventRequest,
   createEventSuccess,
+  deleteEventRequest,
+  deleteEventSuccess,
   fetchEventUsersFailed,
   fetchEventUsersRequest,
   fetchEventUsersSuccess,
   fetchUsernamesFailed,
   fetchUsernamesRequest,
   fetchUsernamesSuccess,
+  getEventFailed,
+  getEventRequest,
+  getEventSuccess,
   inviteUserRequest,
   inviteUserSuccess,
   myEventFailed,
   myEventRequest,
   myEventSuccess,
+  removeUserRequest,
+  removeUserSuccess,
   setMaxEventPrize,
+  updateStatusRequest,
+  updateStatusSuccess,
 } from './slice';
 import { RootState } from '../store';
 import { buildHeaders, callApi, ENDPOINT } from '../api';
 import { buildEventsJson, transformEvents, transformUsers } from './utils';
-import { IEvent } from './types';
-import { updateEventsSyncActionTime } from '../syncConnector/slice';
+import { EventStatuses, IEvent } from './types';
+import {
+  updateEventsSyncActionTime,
+  updateEventViewSyncActionTime,
+} from '../syncConnector/slice';
 import { pushNotification } from '../notifications/slice';
 import { notifications } from '../constants';
 
@@ -91,7 +105,7 @@ export function* fetchUsernamesSaga({ payload }: { payload: string }): any {
 export function* inviteUserSaga({ payload }: { payload: string }): any {
   try {
     const state: RootState = yield select();
-    const eventId = state.events?.eventView?.id;
+    const eventId = state.events?.eventView.data?.id;
 
     const data = {
       username: payload,
@@ -110,7 +124,7 @@ export function* inviteUserSaga({ payload }: { payload: string }): any {
 export function* fetchEventUsersSaga(): any {
   try {
     const state: RootState = yield select();
-    const eventId = state.events?.eventView?.id;
+    const eventId = state.events.eventView.data?.id;
 
     const data = {
       eventId: eventId,
@@ -127,6 +141,117 @@ export function* fetchEventUsersSaga(): any {
   }
 }
 
+export function* removeUserFromEventSaga({
+  payload,
+}: {
+  payload: number;
+}): any {
+  try {
+    const state: RootState = yield select();
+    const eventId = state.events?.eventView.data?.id;
+
+    const data = {
+      eventId: eventId,
+      userId: payload,
+    };
+    if (!eventId) throw new Error();
+    yield call(
+      callApi,
+      ENDPOINT.REMOVE_USER_FROM_EVENT,
+      buildHeaders(state, data),
+    );
+    yield put(removeUserSuccess());
+    yield put(fetchEventUsersRequest({}));
+  } catch (e: any) {
+    yield put(pushNotification(notifications.removeUserError(Date.now())));
+  }
+}
+
+export function* getEventSaga({ payload }: { payload: number }): any {
+  try {
+    const state: RootState = yield select();
+
+    const event = yield call(
+      callApi,
+      ENDPOINT.GET_EVENT(payload),
+      buildHeaders(state, {}, 'GET'),
+    );
+    yield put(getEventSuccess(event));
+  } catch (e: any) {
+    yield put(getEventFailed(e.message as string));
+  }
+}
+
+export function* removeEventSaga({ payload }: { payload: number }): any {
+  try {
+    const state: RootState = yield select();
+
+    yield call(
+      callApi,
+      ENDPOINT.DELETE_EVENT(payload),
+      buildHeaders(state, {}, 'DELETE'),
+    );
+
+    yield put(deleteEventSuccess());
+    yield put(updateEventsSyncActionTime(Date.now()));
+  } catch (e: any) {
+    yield put(pushNotification(notifications.removeEventError(Date.now())));
+  }
+}
+
+export function* updateStatusSaga({
+  payload,
+}: {
+  payload: EventStatuses;
+}): any {
+  try {
+    const state: RootState = yield select();
+
+    const eventId = state.events?.eventView.data?.id;
+
+    const data = {
+      eventId: eventId,
+      status: payload,
+    };
+    if (!eventId) throw new Error();
+
+    yield call(
+      callApi,
+      ENDPOINT.UPDATE_EVENT_STATUS,
+      buildHeaders(state, data, 'PATCH'),
+    );
+
+    yield put(updateStatusSuccess());
+    yield call(getEventSaga, { payload: eventId as number });
+  } catch (e: any) {
+    yield put(pushNotification(notifications.updateStatusError(Date.now())));
+  }
+}
+
+export function* chooseWinnerSaga({ payload }: { payload: number }): any {
+  try {
+    const state: RootState = yield select();
+    const eventId = state.events?.eventView.data?.id;
+
+    const data = {
+      eventId: eventId,
+      userId: payload,
+    };
+    if (!eventId) throw new Error();
+
+    yield call(
+      callApi,
+      ENDPOINT.SET_EVENT_WINNER,
+      buildHeaders(state, data, 'PUT'),
+    );
+
+    yield put(chooseWinnerSuccess());
+    yield call(getEventSaga, { payload: eventId as number });
+  } catch (e: any) {
+    yield put(pushNotification(notifications.chooseWinnerError(Date.now())));
+  }
+}
+
 export default function* root() {
   yield all([
     takeLatest(myEventRequest, fetchMyEventsSaga),
@@ -134,5 +259,10 @@ export default function* root() {
     takeLatest(fetchUsernamesRequest, fetchUsernamesSaga),
     takeLatest(inviteUserRequest, inviteUserSaga),
     takeLatest(fetchEventUsersRequest, fetchEventUsersSaga),
+    takeLatest(removeUserRequest, removeUserFromEventSaga),
+    takeLatest(getEventRequest, getEventSaga),
+    takeLatest(deleteEventRequest, removeEventSaga),
+    takeLatest(updateStatusRequest, updateStatusSaga),
+    takeLatest(chooseWinnerRequest, chooseWinnerSaga),
   ]);
 }

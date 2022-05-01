@@ -19,7 +19,7 @@ export const labels = {
     login: 'Login',
     register: 'Registration',
     logout: 'Sign Out',
-    events: 'Events',
+    events: 'Event Management',
     invites: 'Invites',
   },
   login: {
@@ -102,13 +102,37 @@ export const notifications = {
   }),
   invitedDeclineError: (date: number | Date) => ({
     title: 'Invite decline error.',
-    body: 'Error during declining error.',
+    body: 'Error during declining.',
     date: dateToString(date),
     ...appendNotifyId(date),
   }),
   invitedAcceptError: (date: number | Date) => ({
     title: 'Invite accept error.',
-    body: 'Error during accepting error.',
+    body: 'Error during accepting.',
+    date: dateToString(date),
+    ...appendNotifyId(date),
+  }),
+  removeUserError: (date: number | Date) => ({
+    title: 'Removal user error.',
+    body: 'Error during removing user.',
+    date: dateToString(date),
+    ...appendNotifyId(date),
+  }),
+  removeEventError: (date: number | Date) => ({
+    title: 'Removal event error.',
+    body: 'Error during removing event.',
+    date: dateToString(date),
+    ...appendNotifyId(date),
+  }),
+  updateStatusError: (date: number | Date) => ({
+    title: 'Unable to update status.',
+    body: 'Error during updating event, try again.',
+    date: dateToString(date),
+    ...appendNotifyId(date),
+  }),
+  chooseWinnerError: (date: number | Date) => ({
+    title: 'Unable to set winner.',
+    body: 'Error during choosing winner of event, try again.',
     date: dateToString(date),
     ...appendNotifyId(date),
   }),

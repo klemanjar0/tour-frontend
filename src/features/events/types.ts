@@ -54,6 +54,7 @@ export interface TransformedEvent {
   createdAt?: string;
   updatedAt?: string;
   myRole?: EventRoles;
+  winnerId?: number;
   isActive?: boolean;
 }
 

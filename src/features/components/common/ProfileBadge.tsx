@@ -7,6 +7,7 @@ import { clear, logout } from '../../auth/slice';
 import { labels, PAGE } from '../../constants';
 import { linkStyle, linkStyleRed } from '../../styles';
 import { FaSignOutAlt, FaBell } from 'react-icons/fa';
+import BalanceBar from '../../balance/BalanceBar/BalanceBar';
 
 interface Props {
   isAuthorized: boolean;
@@ -19,9 +20,6 @@ const ProfileBadge: React.FC<Props> = (params) => {
 
   const username = useAppSelector(
     (state: RootState) => state.auth.profile?.username,
-  );
-  const notifyCount = useAppSelector(
-    (state: RootState) => state.notifications.myNotifications.length,
   );
 
   const logOutUser = () => {
@@ -36,11 +34,8 @@ const ProfileBadge: React.FC<Props> = (params) => {
             <Link style={linkStyle} to={`/${PAGE.PROFILE}`}>
               {username}
             </Link>
-            <Badge className="d-flex flex-row p-1" pill bg="danger">
-              <FaBell className="m-1" />
-              <div className="m-1">{notifyCount}</div>
-            </Badge>
           </div>
+          <BalanceBar />
           <div
             className="d-flex flex-row justify-content-between align-items-center"
             onClick={logOutUser}

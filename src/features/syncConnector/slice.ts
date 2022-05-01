@@ -4,12 +4,14 @@ export interface SyncState {
   profileSyncActionTime: number;
   eventsSyncActionTime: number;
   invitesSyncActionTime: number;
+  eventViewSyncActionTime: number;
 }
 
 const initialState: SyncState = {
   profileSyncActionTime: 0,
   eventsSyncActionTime: 0,
   invitesSyncActionTime: 0,
+  eventViewSyncActionTime: 0,
 };
 
 const syncSlice = createSlice({
@@ -34,6 +36,12 @@ const syncSlice = createSlice({
     ) => {
       state.invitesSyncActionTime = action.payload;
     },
+    updateEventViewSyncActionTime: (
+      state: SyncState,
+      action: PayloadAction<number>,
+    ) => {
+      state.invitesSyncActionTime = action.payload;
+    },
   },
 });
 
@@ -41,5 +49,6 @@ export const {
   updateProfileSyncActionTime,
   updateEventsSyncActionTime,
   updateInvitesSyncActionTime,
+  updateEventViewSyncActionTime,
 } = syncSlice.actions;
 export default syncSlice.reducer;

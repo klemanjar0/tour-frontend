@@ -9,7 +9,7 @@ const initialState: SpinnerState = {
 };
 
 const spinnerSlice = createSlice({
-  name: 'router',
+  name: 'spinner',
   initialState,
   reducers: {
     setSpinnerState: (state: SpinnerState, action: PayloadAction<boolean>) => {

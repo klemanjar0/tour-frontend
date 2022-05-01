@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { RootState } from '../store';
 import { getInvitesRequest } from '../invites/slice';
+import { getAccountRequest } from '../balance/silce';
 
 const useOnStartUp = () => {
   const dispatch = useAppDispatch();
@@ -15,6 +16,7 @@ const useOnStartUp = () => {
   useEffect(() => {
     if (isAuthorized) {
       dispatch(getInvitesRequest());
+      dispatch(getAccountRequest());
     }
   }, [isAuthorized, updateInvitesSyncActionTime]);
 };

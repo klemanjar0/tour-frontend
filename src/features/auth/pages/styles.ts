@@ -13,6 +13,7 @@ export const formContainer: CSS.Properties = {
 
 export const spinnerStyle: CSS.Properties = {
   marginRight: '0.5rem',
+  marginLeft: '0.5rem',
 };
 
 export const centerFlex: CSS.Properties = {
