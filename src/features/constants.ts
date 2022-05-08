@@ -94,6 +94,12 @@ export const notifications = {
     date: dateToString(date),
     ...appendNotifyId(date),
   }),
+  balanceChanged: (date: number | Date) => ({
+    title: 'Balance $',
+    body: 'Your balance changed',
+    date: dateToString(date),
+    ...appendNotifyId(date),
+  }),
   invitedSuccessfully: (date: number | Date) => ({
     title: 'Invite',
     body: 'Invite sent.',
@@ -133,6 +139,12 @@ export const notifications = {
   chooseWinnerError: (date: number | Date) => ({
     title: 'Unable to set winner.',
     body: 'Error during choosing winner of event, try again.',
+    date: dateToString(date),
+    ...appendNotifyId(date),
+  }),
+  paymentError: (date: number | Date, body: string) => ({
+    title: 'Payment Error.',
+    body,
     date: dateToString(date),
     ...appendNotifyId(date),
   }),

@@ -37,6 +37,7 @@ import {
 } from '../syncConnector/slice';
 import { pushNotification } from '../notifications/slice';
 import { notifications } from '../constants';
+import { getBalanceSaga } from '../balance/sagas';
 
 export function* fetchMyEventsSaga(): any {
   try {
@@ -80,8 +81,12 @@ export function* createEventSaga({
     yield call(callApi, ENDPOINT.CREATE_EVENT, buildHeaders(state, payload));
     yield put(createEventSuccess());
     yield put(updateEventsSyncActionTime(Date.now()));
+    yield call(getBalanceSaga);
   } catch (e: any) {
     yield put(createEventFailed(e.message as string));
+    yield put(
+      pushNotification(notifications.defaultError(Date.now(), e.message)),
+    );
   }
 }
 

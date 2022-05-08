@@ -6,6 +6,7 @@ import { Socket } from 'socket.io-client';
 import { pushNotification } from '../notifications/slice';
 import { notifications } from '../constants';
 import { updateInvitesSyncActionTime } from '../syncConnector/slice';
+import { getBalanceSaga } from '../balance/sagas';
 
 const socketChannel = function (socket: Socket) {
   return eventChannel((emit) => {
@@ -21,6 +22,10 @@ const socketChannel = function (socket: Socket) {
       emit({ type: socketActions.invite, payload: payload });
     });
 
+    socket.on(socketActions.balance, (payload) => {
+      emit({ type: socketActions.balance, payload: payload });
+    });
+
     const unsubscribe = () => {
       socket.removeAllListeners(socketActions.changes);
     };
@@ -34,6 +39,11 @@ export const inviteHandler = function* (): any {
   yield put(updateInvitesSyncActionTime(Date.now()));
 };
 
+export const balanceHandler = function* (): any {
+  yield put(pushNotification(notifications.balanceChanged(Date.now())));
+  yield call(getBalanceSaga);
+};
+
 export const watchSocket = function* (): any {
   const channel = yield call(socketChannel, configuredSocket);
 
@@ -42,6 +52,9 @@ export const watchSocket = function* (): any {
     console.log(payload);
     if (payload.type === socketActions.invite) {
       yield call(inviteHandler);
+    }
+    if (payload.type === socketActions.balance) {
+      yield call(balanceHandler);
     }
   }
 };

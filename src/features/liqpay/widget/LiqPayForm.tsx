@@ -1,10 +1,11 @@
 import React, { useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { Button } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import axios from 'axios';
 import { checkoutPay } from './utils';
+import { increaseBalanceRequest } from '../../balance/silce';
 
 const Container = styled.div`
   margin: auto;
@@ -56,9 +57,11 @@ const LiqPayForm = () => {
   const [value, setValue] = useState<number>(0);
   const account = useSelector<RootState>((state) => state.balance.account);
   const id = useSelector<RootState>((state) => state.balance.balanceId) || 0;
+  const dispatch = useDispatch();
 
   const checkout = () => {
     setValue(0);
+    dispatch(increaseBalanceRequest({ amount: value }));
   };
 
   return (

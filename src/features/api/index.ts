@@ -37,6 +37,7 @@ export const ENDPOINT = {
   UPDATE_EVENT_STATUS: 'events/updateStatus',
   SET_EVENT_WINNER: 'events/setWinner',
   GET_ACCOUNT: 'balance/get',
+  INCREASE_BALANCE: 'balance/increase',
 };
 
 export const withServer = (endpoint: string) => `${server}${endpoint}`;
