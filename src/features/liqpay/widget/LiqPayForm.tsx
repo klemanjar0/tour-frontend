@@ -31,12 +31,21 @@ const TextInput = styled.input`
   margin-right: auto;
 `;
 
+const CardInput = styled.input`
+  padding: 1px;
+  border: 0;
+  border-bottom: 1px solid black;
+  font-weight: normal;
+  font-size: 18px;
+  margin-right: auto;
+`;
+
 const Row = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
-  margin-bottom: 2px;
+  margin-bottom: 12px;
 `;
 
 const TextGreen = styled.text`
@@ -87,6 +96,13 @@ const LiqPayForm = () => {
           <Button onClick={checkout} variant="success">
             Checkout
           </Button>
+        </Row>
+        <Row>
+          <Text>Withdraw</Text>
+          <TextGreen>$</TextGreen>
+          <TextInput type="number" min="0.00" max="10000.00" step="0.01" />
+          <CardInput placeholder="Credit Card" />
+          <Button variant="success">Proceed</Button>
         </Row>
       </Body>
     </Container>

@@ -1,15 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Button,
-  Card,
-  CloseButton,
-  Col,
-  Container,
-  Form,
-  Placeholder,
-  Row,
-  Spinner,
-} from 'react-bootstrap';
+import { Button, Col, Form, Spinner } from 'react-bootstrap';
 import { useAppDispatch } from '../../store/hooks';
 import {
   chooseWinnerRequest,
@@ -26,14 +16,78 @@ import { labels, PAGE } from '../../constants';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { FaChevronLeft, FaTrashAlt, FaRedoAlt } from 'react-icons/fa';
+import { IoSync, IoTrashOutline } from 'react-icons/io5';
 import { EventRoles, EventStatuses } from '../types';
-import { getEventStatus } from '../utils';
 import useDebouncedOnChange from '../../utils/useDebouncedOnChange';
 import useComponentDidUpdate from '../../utils/hooks';
 import map from 'lodash/map';
 import { spinnerStyle } from '../../auth/pages/styles';
 import EventUserCard from './EventUserCard';
 import StatusManager from './StatusManager';
+import styled from 'styled-components';
+import { grayColor, mainBlack, paleGray, sunsetOrange } from '../../colors';
+import { StyledScrollableDiv } from '../../components/common/styledComponents';
+
+const Header = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const Row = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  margin-top: auto;
+`;
+
+const Card = styled.div`
+  margin-top: 1rem;
+`;
+
+const Body = styled.div`
+  margin-top: 1.5rem;
+`;
+
+const Title = styled.h2`
+  font-family: 'Circular Std', serif;
+  font-weight: normal;
+  color: ${mainBlack};
+`;
+
+const SubTitle = styled.h4`
+  font-family: 'Circular Std', serif;
+  font-weight: normal;
+  color: ${grayColor};
+`;
+
+const Text = styled.span`
+  font-family: 'Circular Std', serif;
+  font-weight: normal;
+  color: ${(props: { color?: string }) => props.color || mainBlack};
+`;
+
+const HeaderButton = styled.button`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  padding: 0.5em 0.7em;
+  background-color: transparent;
+
+  font-family: 'Circular Std', serif;
+  font-weight: normal;
+  font-size: larger;
+  color: ${(props: { color?: string }) => props.color || mainBlack}
+  transition: 0.2s ease-in-out;
+
+  :hover {
+    background-color: rgba(100, 100, 100, 0.2);
+  }
+`;
 
 const EventManager = () => {
   const dispatch = useAppDispatch();
@@ -126,154 +180,141 @@ const EventManager = () => {
   const disableStatusUpdate =
     event?.status === EventStatuses.FINISHED && !event.winnerId;
   return (
-    <div>
-      <Card body className="mt-3">
-        <div className="d-flex w-100 flex-row align-items-center">
-          <Button
-            onClick={onBack}
-            variant="outline-dark"
-            className="d-flex mb-2 mx-1 flex-row p-1 align-items-center"
-          >
-            <FaChevronLeft className="mx-1" />
-            <span className="mx-1">{labels.common.back}</span>
-          </Button>
-          <h3 className="mx-3">{event?.title}</h3>
-          <div
-            className="d-flex flex-row align-items-center position-absolute"
-            style={{ right: 12 }}
-          >
-            <Button
-              onClick={update}
-              className="d-flex justify-content-center align-items-center"
-              variant="secondary"
-            >
-              <span>{fetching ? 'Loading...' : 'Update'}</span>
-              {!fetching ? (
-                <FaRedoAlt className="mx-1" />
-              ) : (
-                <Spinner
-                  animation={'border'}
-                  size={'sm'}
-                  style={spinnerStyle}
-                />
-              )}
-            </Button>
-
-            {isUserAdminOnEvent && (
-              <Button
-                onClick={closeEvent}
-                variant="outline-danger"
-                className="d-flex justify-content-center align-items-center m-1"
-              >
-                <FaTrashAlt className="mx-1" />
-                <span className="mx-1">Delete Event</span>
-              </Button>
-            )}
-          </div>
-        </div>
-        <hr />
-        <div>
-          <h5 className="m-1">Details</h5>
-          <div className="p-1 w-25">
-            <span>Type: {event?.type}</span> <br />
-            <span>Country: {event?.country}</span> <br />
-            <span>Prize: {event?.prizeFund}$</span> <br />
-          </div>
-
-          <div className="m-1">
-            <h5>Description</h5>
-            <span>{event?.description}</span>
-          </div>
-        </div>
-        <hr />
-        <StatusManager
-          disabled={disableStatusUpdate}
-          isAdmin={isUserAdminOnEvent}
-        />
-        <hr />
+    <Card>
+      <Header>
         <Row>
-          <Col>
-            <h5>Members</h5>
-            <div style={{ overflowY: 'scroll', height: '22rem' }}>
-              {!eventUsersFetching ? (
-                map(eventUsers, (user) => (
-                  <EventUserCard
-                    key={user.username}
-                    user={user}
-                    isMyCard={myId === user.id}
-                    role={event?.myRole}
-                    removeUser={removeUser(user.id)}
-                    status={event?.status}
-                    chooseWinner={chooseWinner(user.id)}
-                    isWinner={event?.winnerId === user.id}
-                  />
-                ))
-              ) : (
-                <div className="d-flex mt-4 w-100 justify-content-center align-items-center">
-                  <Spinner style={spinnerStyle} animation="border" />
-                </div>
-              )}
-            </div>
-          </Col>
-          {isUserAdminOnEvent && openedToInvite && (
-            <Col>
-              <h5>Invite new member</h5>
-              <Form>
-                <Form.Control
-                  value={text}
-                  onChange={onTextChange}
-                  type="text"
-                  placeholder="Type username.."
-                />
-              </Form>
-              {users?.length ? (
-                <div style={{ overflowY: 'scroll', height: '20rem' }}>
-                  {!usersFetching ? (
-                    <div style={{ marginTop: 5 }}>
-                      {map(users, (user, idx) => {
-                        return (
-                          <Card
-                            key={`${user}${idx}`}
-                            style={{
-                              padding: 10,
-                              margin: 2,
-                              display: 'flex',
-                              flexDirection: 'row',
-                              justifyContent: 'space-between',
-                            }}
-                          >
-                            <span>{user}</span>
-                            <Button onClick={() => inviteUser(user)}>
-                              Invite
-                            </Button>
-                          </Card>
-                        );
-                      })}
-                    </div>
-                  ) : (
-                    <Spinner
-                      className="justify-content-center d-flex align-items-center"
-                      style={spinnerStyle}
-                      animation="border"
-                    />
-                  )}
-                </div>
-              ) : (
-                <div
-                  style={{
-                    width: '100%',
-                    marginTop: '2rem',
-                    textAlign: 'center',
-                  }}
-                >
-                  {query && 'No users found.'}
-                </div>
-              )}
-            </Col>
+          <HeaderButton onClick={onBack}>
+            <FaChevronLeft className="mx-1" />
+            <Text className="mx-1">{labels.common.back}</Text>
+          </HeaderButton>
+        </Row>
+
+        <Row>
+          <HeaderButton onClick={update}>
+            <Text>{fetching ? 'Loading...' : 'Update'}</Text>
+            {!fetching ? (
+              <IoSync className="mx-1" />
+            ) : (
+              <Spinner animation={'border'} size={'sm'} style={spinnerStyle} />
+            )}
+          </HeaderButton>
+          {isUserAdminOnEvent && (
+            <HeaderButton onClick={closeEvent}>
+              <IoTrashOutline color={sunsetOrange} className="mx-1" />
+              <Text color={sunsetOrange} className="mx-1">
+                Delete Event
+              </Text>
+            </HeaderButton>
           )}
         </Row>
-      </Card>
-    </div>
+      </Header>
+
+      <Body>
+        <Title>{event?.title}</Title>
+      </Body>
+
+      <hr />
+
+      <Body>
+        <SubTitle>Details</SubTitle>
+        <Text>Type: {event?.type}</Text> <br />
+        <Text>Country: {event?.country}</Text> <br />
+        <Text>Prize: {event?.prizeFund}$</Text> <br />
+      </Body>
+
+      <Body>
+        <SubTitle>Description</SubTitle>
+        <Text>{event?.description}</Text>
+      </Body>
+
+      <hr />
+      <StatusManager
+        disabled={disableStatusUpdate}
+        isAdmin={isUserAdminOnEvent}
+      />
+      <hr />
+      <Row>
+        <Col>
+          <SubTitle>Members</SubTitle>
+          <StyledScrollableDiv>
+            {!eventUsersFetching ? (
+              map(eventUsers, (user) => (
+                <EventUserCard
+                  key={user.username}
+                  user={user}
+                  isMyCard={myId === user.id}
+                  role={event?.myRole}
+                  removeUser={removeUser(user.id)}
+                  status={event?.status}
+                  chooseWinner={chooseWinner(user.id)}
+                  isWinner={event?.winnerId === user.id}
+                />
+              ))
+            ) : (
+              <div className="d-flex mt-4 w-100 justify-content-center align-items-center">
+                <Spinner style={spinnerStyle} animation="border" />
+              </div>
+            )}
+          </StyledScrollableDiv>
+        </Col>
+        {isUserAdminOnEvent && openedToInvite && (
+          <Col>
+            <h5>Invite new member</h5>
+            <Form>
+              <Form.Control
+                value={text}
+                onChange={onTextChange}
+                type="text"
+                placeholder="Type username.."
+              />
+            </Form>
+            {users?.length ? (
+              <StyledScrollableDiv>
+                {!usersFetching ? (
+                  <div style={{ marginTop: 5 }}>
+                    {map(users, (user, idx) => {
+                      return (
+                        <Card
+                          key={`${user}${idx}`}
+                          style={{
+                            padding: 10,
+                            margin: 2,
+                            display: 'flex',
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                          }}
+                        >
+                          <span>{user}</span>
+                          <Button onClick={() => inviteUser(user)}>
+                            Invite
+                          </Button>
+                        </Card>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <Spinner
+                    className="justify-content-center d-flex align-items-center"
+                    style={spinnerStyle}
+                    animation="border"
+                  />
+                )}
+              </StyledScrollableDiv>
+            ) : (
+              <div
+                style={{
+                  width: '100%',
+                  marginTop: '2rem',
+                  textAlign: 'center',
+                }}
+              >
+                {query && 'No users found.'}
+              </div>
+            )}
+          </Col>
+        )}
+      </Row>
+    </Card>
   );
 };
 

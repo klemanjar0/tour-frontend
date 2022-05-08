@@ -18,16 +18,16 @@ export const justifySpace: CSS.Properties = {
 
 export const linkStyle: CSS.Properties = {
   textDecoration: 'none',
-  fontFamily: 'sans-serif',
   color: 'black',
-  padding: '0.5rem',
+  paddingRight: '0.4rem',
+  paddingLeft: '0.4rem',
 };
 
 export const linkStyleRed: CSS.Properties = {
   textDecoration: 'none',
-  fontFamily: 'sans-serif',
   color: 'red',
-  padding: '0.5rem',
+  paddingRight: '0.4rem',
+  paddingLeft: '0.4rem',
 };
 
 export const alignLeft: CSS.Properties = {

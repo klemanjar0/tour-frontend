@@ -1,2 +1,9 @@
 export const lightGrayColor = '#bab8b8';
 export const greenColor = 'rgb(0, 215, 104)';
+export const paleGray = 'rgb(223, 223, 223)';
+export const mainGreen = '#1DB954';
+export const mainGreenHovered = 'rgb(15,200,81)';
+export const mainWhite = 'rgb(239,239,239)';
+export const mainBlack = '#191414';
+export const sunsetOrange = '#fd5e53';
+export const grayColor = '#b3b3b3';

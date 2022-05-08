@@ -8,10 +8,25 @@ import { labels, PAGE } from '../../constants';
 import { linkStyle, linkStyleRed } from '../../styles';
 import { FaSignOutAlt, FaBell } from 'react-icons/fa';
 import BalanceBar from '../../balance/BalanceBar/BalanceBar';
+import styled from 'styled-components';
 
 interface Props {
   isAuthorized: boolean;
 }
+
+const RowContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+`;
+
+const StyledLink = styled(Link)`
+  font-weight: inherit;
+  color: black;
+  font-size: inherit;
+  font-family: 'Circular Std', serif;
+`;
 
 const ProfileBadge: React.FC<Props> = (params) => {
   const dispatch = useAppDispatch();
@@ -27,36 +42,33 @@ const ProfileBadge: React.FC<Props> = (params) => {
   };
 
   return (
-    <Container className="d-flex flex-row justify-content-center align-items-center">
+    <RowContainer>
       {isAuthorized ? (
         <>
           <div className="d-flex flex-row align-items-center mr-4">
-            <Link style={linkStyle} to={`/${PAGE.PROFILE}`}>
+            <StyledLink style={linkStyle} to={`/${PAGE.PROFILE}`}>
               {username}
-            </Link>
+            </StyledLink>
           </div>
           <BalanceBar />
-          <div
-            className="d-flex flex-row justify-content-between align-items-center"
-            onClick={logOutUser}
-          >
-            <Link style={linkStyleRed} to={PAGE.HOME}>
+          <div onClick={logOutUser}>
+            <StyledLink style={linkStyleRed} to={PAGE.HOME}>
               {labels.navbar.logout}
-            </Link>
+            </StyledLink>
             <FaSignOutAlt color="red" />
           </div>
         </>
       ) : (
         <>
-          <Link style={linkStyle} to={`/${PAGE.LOGIN}`}>
+          <StyledLink style={linkStyle} to={`/${PAGE.LOGIN}`}>
             {labels.navbar.login}
-          </Link>
+          </StyledLink>
           <Link style={linkStyle} to={`/${PAGE.REGISTER}`}>
             {labels.navbar.register}
           </Link>
         </>
       )}
-    </Container>
+    </RowContainer>
   );
 };
 

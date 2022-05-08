@@ -6,7 +6,7 @@ import { Socket } from 'socket.io-client';
 import { pushNotification } from '../notifications/slice';
 import { notifications } from '../constants';
 import { updateInvitesSyncActionTime } from '../syncConnector/slice';
-import { getBalanceSaga } from '../balance/sagas';
+import { getAccountRequest } from '../balance/silce';
 
 const socketChannel = function (socket: Socket) {
   return eventChannel((emit) => {
@@ -40,8 +40,7 @@ export const inviteHandler = function* (): any {
 };
 
 export const balanceHandler = function* (): any {
-  yield put(pushNotification(notifications.balanceChanged(Date.now())));
-  yield call(getBalanceSaga);
+  yield put(getAccountRequest());
 };
 
 export const watchSocket = function* (): any {

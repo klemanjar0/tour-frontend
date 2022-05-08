@@ -44,5 +44,5 @@ export const transformUsers = (users: any[]) => {
 };
 
 export const getEventStatus = (status?: EventStatuses) => {
-  return status ? EventStatus[status] : '';
+  return status ? EventStatus[status] : EventStatus[0];
 };

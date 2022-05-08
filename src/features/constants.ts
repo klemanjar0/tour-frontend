@@ -31,7 +31,7 @@ export const labels = {
     signUp: 'Sign Up',
   },
   event: {
-    manage: 'Manage Event',
+    manage: 'Details',
     noEvents: 'No events',
     create: 'Establish new event',
     onlyMy: 'Show only me-created events',

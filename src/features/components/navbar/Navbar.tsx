@@ -7,6 +7,21 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { RootState } from '../../store';
 import ProfileBadge from '../common/ProfileBadge';
 import NavbarItems from '../common/NavbarItems';
+import styled from 'styled-components';
+
+const NavBarWithFont = styled(Navbar)`
+  font-family: 'Circular Std', serif;
+  height: auto;
+`;
+
+const NavBarBrand = styled.h4`
+  font-family: 'Circular Std', serif;
+  font-weight: bolder;
+  color: black;
+  text-align-all: center;
+  height: auto;
+  margin: auto;
+`;
 
 const CustomNavbar = () => {
   const isAuthorized = useAppSelector(
@@ -17,14 +32,14 @@ const CustomNavbar = () => {
   );
 
   return (
-    <Navbar bg="light" variant="light">
-      <Container className="d-flex flex-row justify-content-between align-items-center w-100">
+    <NavBarWithFont bg="light" variant="light">
+      <Container className="w-100">
         <div className="d-flex flex-row align-items-center">
-          <Navbar.Brand>
+          <NavBarBrand>
             <Link style={linkStyle} to={PAGE.HOME}>
               {labels.navbar.title}
             </Link>
-          </Navbar.Brand>
+          </NavBarBrand>
           {isAuthorized && (
             <NavbarItems activeInvitesCount={activeInvites.length} />
           )}
@@ -33,7 +48,7 @@ const CustomNavbar = () => {
           <ProfileBadge isAuthorized={isAuthorized} />
         </div>
       </Container>
-    </Navbar>
+    </NavBarWithFont>
   );
 };
 

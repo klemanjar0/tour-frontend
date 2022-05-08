@@ -41,13 +41,13 @@ export function* increaseBalanceSaga({
       ENDPOINT.INCREASE_BALANCE,
       buildHeaders(state, { id, amount }),
     );
-    yield put(increaseBalanceSuccess());
   } catch (e: any) {
     yield put(
       pushNotification(notifications.paymentError(Date.now(), e.message)),
     );
   } finally {
-    yield call(getBalanceSaga);
+    yield put(increaseBalanceSuccess());
+    yield put(getAccountRequest());
   }
 }
 
