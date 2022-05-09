@@ -6,8 +6,37 @@ import {
   getInvitesRequest,
 } from '../slice';
 import { RootState } from '../../store';
-import { Button, Card, Container } from 'react-bootstrap';
 import map from 'lodash/map';
+import styled from 'styled-components';
+import {
+  StyledButton,
+  StyledRow,
+  StyledSubTitle,
+  StyledSubTitleAccent,
+  StyledText,
+  StyledTitle,
+} from '../../components/common/styledComponents';
+import { mainGreen, paleGray, sunsetOrange } from '../../colors';
+
+const Container = styled.div`
+  margin-top: 2rem;
+  padding: 0 3rem;
+`;
+
+const Card = styled.div`
+  margin-bottom: 5px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid ${paleGray};
+`;
+
+const Button = styled(StyledButton)`
+  border: none;
+  border-bottom: 1px solid
+    ${(props: { borderColor: string }) => props.borderColor};
+`;
 
 const Invites = () => {
   const dispatch = useAppDispatch();
@@ -26,39 +55,29 @@ const Invites = () => {
   }, []);
 
   return (
-    <Container style={{ marginTop: 10 }}>
-      <h3>Invites</h3>
+    <Container>
+      <StyledTitle style={{ marginBottom: 30 }}>Invites</StyledTitle>
       {invites.length ? (
         map(invites, (invite) => {
           return (
-            <Card
-              key={invite.id}
-              style={{
-                margin: 5,
-                padding: 10,
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}
-            >
-              <h5>{invite.event.title}</h5>
-              <div>
+            <Card key={invite.id}>
+              <StyledSubTitleAccent>{invite.event.title}</StyledSubTitleAccent>
+              <StyledRow>
                 <Button
                   onClick={() => acceptInvite(invite.id)}
                   style={{ margin: 2 }}
-                  variant={'success'}
+                  borderColor={mainGreen}
                 >
-                  Accept
+                  <StyledText color={mainGreen}>Accept</StyledText>
                 </Button>
                 <Button
                   onClick={() => declineInvite(invite.id)}
                   style={{ margin: 2 }}
-                  variant={'danger'}
+                  borderColor={sunsetOrange}
                 >
-                  Decline
+                  <StyledText color={sunsetOrange}>Decline</StyledText>
                 </Button>
-              </div>
+              </StyledRow>
             </Card>
           );
         })
@@ -72,7 +91,7 @@ const Invites = () => {
             padding: 20,
           }}
         >
-          No invites yet.
+          <StyledText>No invites yet.</StyledText>
         </Card>
       )}
     </Container>

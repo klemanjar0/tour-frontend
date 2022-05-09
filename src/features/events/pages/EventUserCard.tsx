@@ -1,15 +1,15 @@
 import React from 'react';
-import { Button, Card } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { getUserRoleTitle } from '../../utils';
-import { UserRoleColor } from '../../constants';
 import { EventRoles, EventStatuses } from '../types';
 import styled from 'styled-components';
-import { grayColor, mainGreen, paleGray } from '../../colors';
+import { grayColor, mainGreen, sunsetOrange } from '../../colors';
 import {
+  StyledButton,
   StyledRow,
   StyledText,
 } from '../../components/common/styledComponents';
-import { IUser, UserRoles } from '../../auth/types';
+import { IoLogOut, IoRibbonOutline } from 'react-icons/io5';
 
 const CardDiv = styled.div`
   display: flex;
@@ -20,7 +20,6 @@ const CardDiv = styled.div`
   border-bottom: 1px solid ${mainGreen};
   padding: 0.5rem 0;
   margin-bottom: 0.3rem;
-  margin-right: 0.3rem;
 `;
 
 const Badge = styled.div`
@@ -69,35 +68,45 @@ const EventUserCard = ({
         <Badge>
           <StyledText>{getUserRoleTitle(user.eventRole)}</StyledText>
         </Badge>
+        {isWinner && (
+          <IoRibbonOutline
+            color={mainGreen}
+            style={{ marginLeft: 14 }}
+            size={32}
+          />
+        )}
       </StyledRow>
 
       {adminOrHigher && !statusClosed && (
-        <div>
+        <StyledRow>
           {statusFinished && !isMyCard ? (
-            <div>
-              {!isWinner && (
-                <Button onClick={chooseWinner}>Choose as winner</Button>
-              )}
-            </div>
+            <StyledRow>
+              <StyledButton disabled={isWinner} onClick={chooseWinner}>
+                <StyledText color={mainGreen}>
+                  {isWinner ? 'Chosen' : 'Choose as winner'}
+                </StyledText>
+              </StyledButton>
+            </StyledRow>
           ) : (
-            <div>
+            <StyledRow>
               {!isMyCard && (
-                <div>
-                  <Button style={{ margin: 2 }} variant={'outline-info'}>
-                    Ban
-                  </Button>
-                  <Button
-                    onClick={removeUser}
-                    style={{ margin: 2 }}
-                    variant={'outline-danger'}
-                  >
-                    Remove
-                  </Button>
-                </div>
+                <StyledRow>
+                  <StyledButton>
+                    <StyledText color={grayColor}>Ban</StyledText>
+                  </StyledButton>
+                  <StyledButton onClick={removeUser}>
+                    <StyledText color={sunsetOrange}>Remove</StyledText>
+                    <IoLogOut
+                      style={{ marginLeft: 5, marginTop: 1 }}
+                      color={sunsetOrange}
+                      size={24}
+                    />
+                  </StyledButton>
+                </StyledRow>
               )}
-            </div>
+            </StyledRow>
           )}
-        </div>
+        </StyledRow>
       )}
     </CardDiv>
   );

@@ -115,6 +115,11 @@ const eventsSlice = createSlice({
       state.assets.fetching = false;
       state.error = action.payload;
     },
+    clearUsernames: (state: EventsState) => {
+      state.assets.users = [];
+      state.assets.fetching = false;
+      state.error = undefined;
+    },
 
     inviteUserRequest: (state: EventsState, { payload }) => {
       state.fetching = true;
@@ -230,5 +235,6 @@ export const {
   updateStatusSuccess,
   chooseWinnerRequest,
   chooseWinnerSuccess,
+  clearUsernames,
 } = eventsSlice.actions;
 export default eventsSlice.reducer;

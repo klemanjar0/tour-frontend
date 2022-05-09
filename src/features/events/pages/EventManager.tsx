@@ -4,6 +4,7 @@ import { useAppDispatch } from '../../store/hooks';
 import {
   chooseWinnerRequest,
   clearEventView,
+  clearUsernames,
   deleteEventRequest,
   fetchEventUsersRequest,
   fetchUsernamesRequest,
@@ -25,8 +26,19 @@ import { spinnerStyle } from '../../auth/pages/styles';
 import EventUserCard from './EventUserCard';
 import StatusManager from './StatusManager';
 import styled from 'styled-components';
-import { grayColor, mainBlack, paleGray, sunsetOrange } from '../../colors';
-import { StyledScrollableDiv } from '../../components/common/styledComponents';
+import {
+  grayColor,
+  mainBlack,
+  mainGreen,
+  paleGray,
+  sunsetOrange,
+} from '../../colors';
+import {
+  StyledRow,
+  StyledRowSpaceBetween,
+  StyledScrollableDiv,
+} from '../../components/common/styledComponents';
+import SearchBar from '../../components/SearchBar/SearchBar';
 
 const Header = styled.div`
   display: flex;
@@ -89,18 +101,30 @@ const HeaderButton = styled.button`
   }
 `;
 
+const Input = styled.input`
+  font-family: 'Circular Std', serif;
+  font-weight: normal;
+  outline: none;
+  padding: 0.5em 0.7em;
+  border: none;
+  border-bottom: 2px solid ${mainGreen};
+
+  ::placeholder:focus {
+    color: #cccccc;
+  }
+`;
+
 const EventManager = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const [text, setText] = useState('');
   const [query, setQuery] = useState('');
-  const [debouncedChange] = useDebouncedOnChange({ onChange: setQuery });
   const fetching = useSelector(
     (state: RootState) => state.events.eventView.fetching,
   );
   const myId = useSelector((state: RootState) => state.auth?.profile?.id);
   const event = useSelector((state: RootState) => state.events.eventView.data);
   const users = useSelector((state: RootState) => state.events.assets.users);
+
   const usersFetching = useSelector(
     (state: RootState) => state.events.assets.fetching,
   );
@@ -136,12 +160,6 @@ const EventManager = () => {
     dispatch(getEventRequest(event?.id));
   };
 
-  const onTextChange = (event: any) => {
-    const val = event.target.value;
-    setText(val);
-    debouncedChange(val);
-  };
-
   const inviteUser = (username: string) => {
     dispatch(inviteUserRequest(username));
   };
@@ -174,7 +192,11 @@ const EventManager = () => {
   }, []);
 
   useComponentDidUpdate(() => {
-    dispatch(fetchUsernamesRequest(query));
+    if (query.length) {
+      dispatch(fetchUsernamesRequest(query));
+    } else {
+      dispatch(clearUsernames());
+    }
   }, [query]);
 
   const disableStatusUpdate =
@@ -233,87 +255,41 @@ const EventManager = () => {
         isAdmin={isUserAdminOnEvent}
       />
       <hr />
-      <Row>
-        <Col>
-          <SubTitle>Members</SubTitle>
-          <StyledScrollableDiv>
-            {!eventUsersFetching ? (
-              map(eventUsers, (user) => (
-                <EventUserCard
-                  key={user.username}
-                  user={user}
-                  isMyCard={myId === user.id}
-                  role={event?.myRole}
-                  removeUser={removeUser(user.id)}
-                  status={event?.status}
-                  chooseWinner={chooseWinner(user.id)}
-                  isWinner={event?.winnerId === user.id}
-                />
-              ))
-            ) : (
-              <div className="d-flex mt-4 w-100 justify-content-center align-items-center">
-                <Spinner style={spinnerStyle} animation="border" />
-              </div>
-            )}
-          </StyledScrollableDiv>
-        </Col>
+
+      <StyledRowSpaceBetween>
+        <SubTitle>Members</SubTitle>
+
         {isUserAdminOnEvent && openedToInvite && (
-          <Col>
-            <h5>Invite new member</h5>
-            <Form>
-              <Form.Control
-                value={text}
-                onChange={onTextChange}
-                type="text"
-                placeholder="Type username.."
-              />
-            </Form>
-            {users?.length ? (
-              <StyledScrollableDiv>
-                {!usersFetching ? (
-                  <div style={{ marginTop: 5 }}>
-                    {map(users, (user, idx) => {
-                      return (
-                        <Card
-                          key={`${user}${idx}`}
-                          style={{
-                            padding: 10,
-                            margin: 2,
-                            display: 'flex',
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
-                          }}
-                        >
-                          <span>{user}</span>
-                          <Button onClick={() => inviteUser(user)}>
-                            Invite
-                          </Button>
-                        </Card>
-                      );
-                    })}
-                  </div>
-                ) : (
-                  <Spinner
-                    className="justify-content-center d-flex align-items-center"
-                    style={spinnerStyle}
-                    animation="border"
-                  />
-                )}
-              </StyledScrollableDiv>
-            ) : (
-              <div
-                style={{
-                  width: '100%',
-                  marginTop: '2rem',
-                  textAlign: 'center',
-                }}
-              >
-                {query && 'No users found.'}
-              </div>
-            )}
-          </Col>
+          <SearchBar
+            fetching={usersFetching}
+            value={query}
+            onTextChange={setQuery}
+            items={users}
+            placeholder="Invite new user..."
+            onSelectItem={inviteUser}
+          />
         )}
-      </Row>
+      </StyledRowSpaceBetween>
+      <StyledScrollableDiv>
+        {!eventUsersFetching ? (
+          map(eventUsers, (user) => (
+            <EventUserCard
+              key={user.username}
+              user={user}
+              isMyCard={myId === user.id}
+              role={event?.myRole}
+              removeUser={removeUser(user.id)}
+              status={event?.status}
+              chooseWinner={chooseWinner(user.id)}
+              isWinner={event?.winnerId === user.id}
+            />
+          ))
+        ) : (
+          <div className="d-flex mt-4 w-100 justify-content-center align-items-center">
+            <Spinner style={spinnerStyle} animation="border" />
+          </div>
+        )}
+      </StyledScrollableDiv>
     </Card>
   );
 };
