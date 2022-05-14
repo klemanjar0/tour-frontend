@@ -1,25 +1,56 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import {
-  Container,
-  Row,
-  Col,
-  Image,
-  Button,
-  Modal,
-  Form,
-  Spinner,
-} from 'react-bootstrap';
+import { Row, Col, Image, Button, Modal, Form, Spinner } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { labels, notifications } from '../../constants';
-import { getUserRoleTitle } from '../../utils';
 import { useAppDispatch } from '../../store/hooks';
 import { passwordChangeRequest } from '../../auth/slice';
 import { margin } from '../../styles';
-import moment from 'moment/moment';
 import { useNotifications } from '../../notifications/NotificationService';
 import useComponentDidUpdate from '../../utils/hooks';
 import LiqPayForm from '../../liqpay/widget/LiqPayForm';
+import styled from 'styled-components';
+import {
+  StyledButton,
+  StyledText,
+  StyledTextInput,
+  StyledTitle,
+} from '../../components/common/styledComponents';
+import { sunsetOrange } from '../../colors';
+
+const Container = styled.div`
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 2rem 4rem;
+
+  @media (max-width: 800px) {
+    flex-direction: column;
+    padding: 0.5rem 1rem;
+  }
+`;
+
+const LeftColumn = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 0.3;
+`;
+
+const RightColumn = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 0.7;
+`;
+
+const ButtonBlock = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-top: 1rem;
+  gap: 0.3rem;
+`;
 
 const initialDataState = {
   oldPassword: '',
@@ -65,48 +96,42 @@ const Profile = () => {
 
   return (
     <>
-      <Container className="mt-3">
-        <h1>
-          <span>{user?.username}</span>
-        </h1>
-        <hr />
-        <Row>
-          <Col sm={4}>
-            <Image src={user?.imageUrl} width="100%" />
-            <Button
-              onClick={updateImage}
-              className="mt-2 w-100"
-              variant="light"
-            >
+      <Container>
+        <LeftColumn>
+          <StyledTitle>{user?.username}</StyledTitle>
+          <Image src={user?.imageUrl} width="100%" />
+          <ButtonBlock>
+            <StyledButton onClick={updateImage} block>
               {labels.profile.updateImage}
-            </Button>
-            <Button onClick={openModal} className="mt-2 w-100" variant="light">
+            </StyledButton>
+            <StyledButton onClick={openModal} block>
               {labels.profile.updatePassword}
-            </Button>
-          </Col>
-          <Col sm={8}>
-            <LiqPayForm />
-          </Col>
-        </Row>
+            </StyledButton>
+          </ButtonBlock>
+        </LeftColumn>
+        <RightColumn>
+          <LiqPayForm />
+        </RightColumn>
       </Container>
+
       <Modal show={showModal} onHide={closeModal}>
         <Modal.Header closeButton>
           <Modal.Title>{labels.profile.updatePassword}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
-            <Form.Group className="mb-3" controlId="formBasicPassword">
-              <Form.Label>Old Password</Form.Label>
-              <Form.Control
+            <Form.Group className="mb-3" controlId="formBasicPassword1">
+              <StyledText>Old Password</StyledText>
+              <StyledTextInput
                 value={data.oldPassword}
                 onChange={handleInput('oldPassword')}
                 type="password"
                 placeholder="Old Password"
               />
             </Form.Group>
-            <Form.Group className="mb-3" controlId="formBasicPassword">
-              <Form.Label>New Password</Form.Label>
-              <Form.Control
+            <Form.Group className="mb-3" controlId="formBasicPassword2">
+              <StyledText>New Password</StyledText>
+              <StyledTextInput
                 value={data.newPassword}
                 onChange={handleInput('newPassword')}
                 type="password"
@@ -121,20 +146,15 @@ const Profile = () => {
           )}
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={closeModal}>
-            {labels.common.cancel}
-          </Button>
-          <Button
-            variant="primary"
-            className="flex-row align-items-center justify-content-between"
-            disabled={fetching}
-            onClick={onSubmit}
-          >
+          <StyledButton onClick={closeModal}>
+            <StyledText color={sunsetOrange}>{labels.common.cancel}</StyledText>
+          </StyledButton>
+          <StyledButton disabled={fetching} onClick={onSubmit}>
             {labels.common.save}
             {fetching && (
               <Spinner className="ml-1" size="sm" animation="grow" />
             )}
-          </Button>
+          </StyledButton>
         </Modal.Footer>
       </Modal>
     </>

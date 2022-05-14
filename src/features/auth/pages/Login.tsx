@@ -6,6 +6,35 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { clearError, loginRequest } from '../slice';
 import { RootState } from '../../store';
 import { flexColumnStyle, margin } from '../../styles';
+import styled from 'styled-components';
+import {
+  StyledButton,
+  StyledErrorText,
+  StyledText,
+  StyledTextInput,
+  StyledTitle,
+} from '../../components/common/styledComponents';
+
+const Container = styled.div`
+  padding: 2rem 4rem;
+
+  @media (max-width: 800px) {
+    padding: 1rem 1rem;
+  }
+`;
+
+const Body = styled.div`
+  margin-top: 1rem;
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: start;
+
+  gap: 12px;
+`;
 
 const Login = () => {
   const dispatch = useAppDispatch();
@@ -31,47 +60,32 @@ const Login = () => {
 
   return (
     <>
-      <div style={formContainer}>
-        <h1>{labels.login.signIn}</h1>
-        <hr />
-        <Form>
-          <Form.Group className="mb-3" controlId="formBasicEmail">
-            <Form.Label>Email address</Form.Label>
-            <Form.Control
-              type="email"
-              placeholder="Enter email"
-              value={email}
-              onChange={(event: any) => setEmail(event.target.value)}
-            />
-            <Form.Text className="text-muted">
-              We'll never share your email with anyone else.
-            </Form.Text>
-          </Form.Group>
-
-          <Form.Group className="mb-3" controlId="formBasicPassword">
-            <Form.Label>Password</Form.Label>
-            <Form.Control
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(event: any) => setPassword(event.target.value)}
-            />
-          </Form.Group>
-          <div style={flexColumnStyle}>
-            {!!error && (
-              <Form.Text style={margin} className="text-danger">
-                {error}
-              </Form.Text>
-            )}
-            <Button variant="primary" type="button" onClick={authorize}>
+      <Container>
+        <StyledTitle>{labels.login.signIn}</StyledTitle>
+        <Body>
+          <StyledTextInput
+            type="email"
+            placeholder="Enter email or username..."
+            value={email}
+            onChange={(event: any) => setEmail(event.target.value)}
+          />
+          <StyledTextInput
+            type="password"
+            placeholder="Enter password..."
+            value={password}
+            onChange={(event: any) => setPassword(event.target.value)}
+          />
+          <ButtonContainer>
+            <StyledErrorText>{error ? error : ' '}</StyledErrorText>
+            <StyledButton onClick={authorize} block>
               {fetching && (
                 <Spinner style={spinnerStyle} size="sm" animation="border" />
               )}
               {labels.login.signIn}
-            </Button>
-          </div>
-        </Form>
-      </div>
+            </StyledButton>
+          </ButtonContainer>
+        </Body>
+      </Container>
     </>
   );
 };

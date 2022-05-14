@@ -3,63 +3,47 @@ import styled from 'styled-components';
 import { Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
-import axios from 'axios';
-import { checkoutPay } from './utils';
 import { increaseBalanceRequest } from '../../balance/silce';
+import {
+  StyledButton,
+  StyledSubTitle,
+  StyledText,
+  StyledTextInput,
+  StyledTitle,
+} from '../../components/common/styledComponents';
+import { mainGreen } from '../../colors';
 
 const Container = styled.div`
-  margin: auto;
-`;
-
-const Header = styled.h2`
-  font-weight: bolder;
-`;
-
-const Divider = styled.hr`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin-left: 2rem;
   width: 100%;
-`;
-const Body = styled.div`
-  padding: 1px;
-`;
 
-const TextInput = styled.input`
-  padding: 1px;
-  border: 0;
-  border-bottom: 1px solid green;
-  font-weight: normal;
-  font-size: 18px;
-  margin-right: auto;
-`;
-
-const CardInput = styled.input`
-  padding: 1px;
-  border: 0;
-  border-bottom: 1px solid black;
-  font-weight: normal;
-  font-size: 18px;
-  margin-right: auto;
+  @media (max-width: 800px) {
+    margin-top: 1rem;
+    margin-left: 0;
+  }
 `;
 
 const Row = styled.div`
   display: flex;
+  flex: 1;
   flex-direction: row;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
+  width: 100%;
   margin-bottom: 12px;
 `;
 
-const TextGreen = styled.text`
-  color: green;
-  font-weight: normal;
-  margin-right: 4px;
-  font-size: 18px;
-`;
-
-const Text = styled.text`
-  color: black;
-  font-weight: normal;
-  margin-right: 0.5rem;
-  font-size: 18px;
+const _$ = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
 `;
 
 const LiqPayForm = () => {
@@ -75,17 +59,17 @@ const LiqPayForm = () => {
 
   return (
     <Container>
-      <Header>Balance</Header>
-      <Divider />
-      <Body>
-        <Row>
-          <Text>Current account balance: ${account}</Text>
-        </Row>
-        <Divider />
-        <Row>
-          <Text>Replenish the Balance</Text>
-          <TextGreen>$</TextGreen>
-          <TextInput
+      <StyledTitle>Balance</StyledTitle>
+      <Row>
+        <StyledSubTitle>Current account balance: ${account}</StyledSubTitle>
+      </Row>
+      <Row>
+        <_$>
+          <StyledText>Replenish the Balance</StyledText>
+        </_$>
+        <_$>
+          <StyledText color={mainGreen}>$</StyledText>
+          <StyledTextInput
             value={value}
             onChange={(event: any) => setValue(event.target.value)}
             type="number"
@@ -93,18 +77,11 @@ const LiqPayForm = () => {
             max="10000.00"
             step="0.01"
           />
-          <Button onClick={checkout} variant="success">
+          <StyledButton block onClick={checkout}>
             Checkout
-          </Button>
-        </Row>
-        <Row>
-          <Text>Withdraw</Text>
-          <TextGreen>$</TextGreen>
-          <TextInput type="number" min="0.00" max="10000.00" step="0.01" />
-          <CardInput placeholder="Credit Card" />
-          <Button variant="success">Proceed</Button>
-        </Row>
-      </Body>
+          </StyledButton>
+        </_$>
+      </Row>
     </Container>
   );
 };

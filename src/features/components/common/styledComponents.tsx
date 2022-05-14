@@ -1,5 +1,11 @@
 import styled from 'styled-components';
-import { grayColor, mainBlack, mainGreen } from '../../colors';
+import {
+  grayColor,
+  mainBlack,
+  mainGreen,
+  paleGray,
+  sunsetOrange,
+} from '../../colors';
 
 export const StyledRow = styled.div`
   display: flex;
@@ -55,6 +61,12 @@ export const StyledScrollableDiv = styled.div`
   }
 `;
 
+interface ButtonProps {
+  color?: string;
+  disabled?: boolean;
+  block?: boolean;
+}
+
 export const StyledButton = styled.button`
   display: flex;
   flex-direction: row;
@@ -63,18 +75,48 @@ export const StyledButton = styled.button`
   border: none;
   padding: 0.5em 0.7em;
   background-color: transparent;
+  width: ${({ block }: ButtonProps) => (block ? '100%' : undefined)};
+  gap: 12px;
 
   font-family: 'Circular Std', serif;
   font-weight: normal;
   font-size: larger;
-  color: ${({ color, disabled }: { color?: string; disabled?: boolean }) => {
+  color: ${({ color, disabled }: ButtonProps) => {
     return disabled ? grayColor : color || mainBlack;
   }}
-  transition: 0.2s ease-in-out;
+  transition: 0.3s ease-in-out;
   
   :hover {
-    transition: 0.2s ease-in-out;
+    transition: 0.3s ease-in-out;
     background-color: rgba(100, 100, 100, 0.2);
+  }
+
+  &:hover {
     color: ${mainGreen}
   }
+`;
+
+export const StyledTextInput = styled.input`
+  width: 100%;
+  outline: none;
+  border: none;
+  margin: 1rem 0;
+
+  background-color: transparent;
+
+  border-bottom: 2px solid ${mainGreen};
+  font-family: 'Circular Std', serif;
+  font-weight: normal;
+  font-size: larger;
+
+  ::placeholder {
+    color: ${grayColor};
+  }
+`;
+
+export const StyledErrorText = styled.span`
+  color: ${sunsetOrange};
+  font-family: 'Circular Std', serif;
+  font-weight: normal;
+  font-size: medium;
 `;
