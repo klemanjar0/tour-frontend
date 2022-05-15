@@ -78,6 +78,9 @@ const authSlice = createSlice({
       state.fetching = false;
       state.error = action.payload;
     },
+    clearPasswordChangeError: (state: AuthState) => {
+      state.error = undefined;
+    },
   },
 });
 
@@ -94,5 +97,6 @@ export const {
   passwordChangeRequest,
   passwordChangeSuccess,
   passwordChangeFailed,
+  clearPasswordChangeError,
 } = authSlice.actions;
 export default authSlice.reducer;

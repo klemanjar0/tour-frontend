@@ -4,7 +4,10 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { labels, notifications } from '../../constants';
 import { useAppDispatch } from '../../store/hooks';
-import { passwordChangeRequest } from '../../auth/slice';
+import {
+  clearPasswordChangeError,
+  passwordChangeRequest,
+} from '../../auth/slice';
 import { margin } from '../../styles';
 import { useNotifications } from '../../notifications/NotificationService';
 import useComponentDidUpdate from '../../utils/hooks';
@@ -12,6 +15,7 @@ import LiqPayForm from '../../liqpay/widget/LiqPayForm';
 import styled from 'styled-components';
 import {
   StyledButton,
+  StyledErrorText,
   StyledText,
   StyledTextInput,
   StyledTitle,
@@ -72,7 +76,10 @@ const Profile = () => {
   );
 
   const openModal = () => setShowModal(true);
-  const closeModal = () => setShowModal(false);
+  const closeModal = () => {
+    setShowModal(false);
+    dispatch(clearPasswordChangeError());
+  };
 
   const handleInput = (fieldName: string) => (event: any) =>
     setData({
@@ -140,9 +147,9 @@ const Profile = () => {
             </Form.Group>
           </Form>
           {!!error && (
-            <Form.Text style={margin} className="text-danger">
+            <StyledErrorText style={margin} color={sunsetOrange}>
               {error}
-            </Form.Text>
+            </StyledErrorText>
           )}
         </Modal.Body>
         <Modal.Footer>

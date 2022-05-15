@@ -9,7 +9,7 @@ export interface EventsState {
     fetching: boolean;
   };
   selectedEventId?: number;
-  filters?: EventFilters;
+  filters: EventFilters;
   maxEventPrize?: number;
   eventView: {
     data?: TransformedEvent;
@@ -24,9 +24,19 @@ export interface EventsState {
   error?: string;
 }
 
+const filtersInitialState = {
+  onlyMy: false,
+  roleLevel: null,
+  country: null,
+  prizeMin: null,
+  prizeMax: null,
+  status: null,
+};
+
 const initialState: EventsState = {
   myEvents: [],
   fetching: false,
+  filters: filtersInitialState,
   eventView: {
     fetching: false,
   },
@@ -200,6 +210,17 @@ const eventsSlice = createSlice({
       state.eventView.fetching = false;
       state.eventView.error = action.payload;
     },
+
+    setEventFilters: (
+      state: EventsState,
+      action: PayloadAction<EventFilters>,
+    ) => {
+      state.filters = action.payload;
+    },
+
+    clearEventFilters: (state: EventsState) => {
+      state.filters = filtersInitialState;
+    },
   },
 });
 
@@ -236,5 +257,7 @@ export const {
   chooseWinnerRequest,
   chooseWinnerSuccess,
   clearUsernames,
+  setEventFilters,
+  clearEventFilters,
 } = eventsSlice.actions;
 export default eventsSlice.reducer;

@@ -31,19 +31,17 @@ import { RootState } from '../store';
 import { buildHeaders, callApi, ENDPOINT } from '../api';
 import { buildEventsJson, transformEvents, transformUsers } from './utils';
 import { EventStatuses, IEvent } from './types';
-import {
-  updateEventsSyncActionTime,
-  updateEventViewSyncActionTime,
-} from '../syncConnector/slice';
+import { updateEventsSyncActionTime } from '../syncConnector/slice';
 import { pushNotification } from '../notifications/slice';
 import { notifications } from '../constants';
-import { getBalanceSaga } from '../balance/sagas';
 import { getAccountRequest } from '../balance/silce';
 
 export function* fetchMyEventsSaga(): any {
   try {
     const state: RootState = yield select();
-    const json = buildEventsJson();
+    const filters = state.events.filters;
+
+    const json = buildEventsJson(filters);
 
     const response = yield call(
       callApi,

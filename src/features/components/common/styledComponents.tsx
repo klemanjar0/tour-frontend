@@ -3,6 +3,7 @@ import {
   grayColor,
   mainBlack,
   mainGreen,
+  mainWhite,
   paleGray,
   sunsetOrange,
 } from '../../colors';
@@ -37,7 +38,7 @@ export const StyledSubTitleAccent = styled.h3`
 export const StyledSubTitle = styled.h4`
   font-family: 'Circular Std', serif;
   font-weight: normal;
-  color: ${grayColor};
+  color: ${(props: { color?: string }) => props.color || grayColor};
 `;
 
 interface IStyledText {
@@ -119,4 +120,17 @@ export const StyledErrorText = styled.span`
   font-family: 'Circular Std', serif;
   font-weight: normal;
   font-size: medium;
+`;
+
+export const StyledRangeInput = styled.input`
+  display: flex;
+  flex-direction: row;
+  justify-items: flex-start;
+  align-items: center;
+  transition: background 450ms ease-in;
+
+  width: 100%;
+  height: 18px;
+  margin: 15px 0;
+  border-radius: 16px;
 `;

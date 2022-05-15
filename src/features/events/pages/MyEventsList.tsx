@@ -8,6 +8,10 @@ import EventItem from './EventItem';
 import { TransformedEvent } from '../types';
 import { labels, PAGE } from '../../constants';
 import EventFilters from './EventFilters';
+import {
+  StyledSubTitle,
+  StyledSubTitleAccent,
+} from '../../components/common/styledComponents';
 
 const MyEventsList = () => {
   const dispatch = useAppDispatch();
@@ -49,9 +53,9 @@ const MyEventsList = () => {
             {!!events.length && !fetching ? (
               <div className="mb-1">{events.map(renderItem)}</div>
             ) : (
-              <Card body style={centerFlex}>
-                {labels.event.noEvents}
-              </Card>
+              <Container className="mt-1" style={centerFlex}>
+                <StyledSubTitle>{labels.event.noEvents}</StyledSubTitle>
+              </Container>
             )}
           </Col>
         </Row>

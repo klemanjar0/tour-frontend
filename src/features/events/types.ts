@@ -59,9 +59,19 @@ export interface TransformedEvent {
 }
 
 export interface EventFilters {
-  roleLevel: EventRoles;
-  country: string;
-  prizeMin: number;
-  prizeMax: number;
-  status: EventStatuses;
+  onlyMy: boolean;
+  roleLevel: EventRoles | null;
+  country: string | null;
+  prizeMin: number | null;
+  prizeMax: number | null;
+  status: EventStatuses | null;
+}
+
+export enum EventFilterName {
+  onlyMy = 'onlyMy',
+  roleLevel = 'roleLevel',
+  country = 'country',
+  prizeMin = 'prizeMin',
+  prizeMax = 'prizeMax',
+  status = 'status',
 }

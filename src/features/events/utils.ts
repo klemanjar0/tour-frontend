@@ -2,12 +2,19 @@ import { EventStatuses, IEvent, TransformedEvent } from './types';
 import map from 'lodash/map';
 import head from 'lodash/head';
 import { EventStatus } from '../constants';
-import { IUser } from '../auth/types';
+import { RootState } from '../store';
 
-export const buildEventsJson = () => ({
-  start: 0,
-  limit: -1,
-});
+export const buildEventsJson = (filters: RootState['events']['filters']) => {
+  return {
+    start: 0,
+    limit: -1,
+    searchParams: {
+      onlyMy: filters.onlyMy,
+      prizeMin: filters.prizeMin,
+      prizeMax: filters.prizeMax,
+    },
+  };
+};
 
 export const transformEvents = (events: IEvent[]): TransformedEvent[] => {
   return (
