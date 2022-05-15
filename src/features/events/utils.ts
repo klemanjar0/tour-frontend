@@ -12,6 +12,8 @@ export const buildEventsJson = (filters: RootState['events']['filters']) => {
       onlyMy: filters.onlyMy,
       prizeMin: filters.prizeMin,
       prizeMax: filters.prizeMax,
+      country: filters.country,
+      title: filters.title,
     },
   };
 };
@@ -31,6 +33,7 @@ export const transformEvents = (events: IEvent[]): TransformedEvent[] => {
         description: event.description,
         createdAt: event.createdAt,
         updatedAt: event.updatedAt,
+        twitchUrl: event.twitchUrl,
         myRole: myRole,
         isActive: isActive,
       };

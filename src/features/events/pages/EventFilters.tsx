@@ -11,8 +11,10 @@ import useComponentDidUpdate from '../../utils/hooks';
 import {
   StyledRangeInput,
   StyledSubTitle,
+  StyledTextInput,
 } from '../../components/common/styledComponents';
 import useDebouncedOnChange from '../../utils/useDebouncedOnChange';
+import { IoChevronDown, IoChevronUp } from 'react-icons/io5';
 
 const CreateButton = styled.button`
   display: flex;
@@ -60,7 +62,7 @@ const Row = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
+  width: ${(props: { width?: string }) => props.width || '100%'};
 `;
 
 const Column = styled.div`
@@ -111,7 +113,8 @@ const EventFilters = () => {
   const onRangeChange = (fieldName: EventFilterName) => (value: any) => {
     const max =
       fieldName === EventFilterName.prizeMin &&
-      (filterState.prizeMax == null || filterState.prizeMax <= value)
+      filterState.prizeMax &&
+      filterState.prizeMax <= value
         ? {
             prizeMax: Number(value),
           }
@@ -119,7 +122,8 @@ const EventFilters = () => {
 
     const min =
       fieldName === EventFilterName.prizeMax &&
-      (filterState.prizeMin == null || filterState.prizeMin >= value)
+      filterState.prizeMin &&
+      filterState.prizeMin >= value
         ? {
             prizeMin: Number(value),
           }
@@ -135,11 +139,56 @@ const EventFilters = () => {
     );
   };
 
+  const renderPrizeRange = () => {
+    const items: JSX.Element[] = [];
+    const { prizeMin, prizeMax } = filterState;
+    if (!prizeMin && !prizeMax) {
+      items.push(<>All</>);
+    }
+
+    if (prizeMin && !prizeMax) {
+      items.push(
+        <>
+          <IoChevronUp color={mainGreen} size={22} />${prizeMin}
+        </>,
+      );
+    }
+
+    if (!prizeMin && prizeMax) {
+      items.push(
+        <>
+          <IoChevronDown color={mainGreen} size={22} />${prizeMax}
+        </>,
+      );
+    }
+
+    if (prizeMin && prizeMax) {
+      items.push(
+        <>
+          ${prizeMin} - ${prizeMax}
+        </>,
+      );
+    }
+
+    return <StyledSubTitle color={mainGreen}>{items}</StyledSubTitle>;
+  };
+
   return (
     <>
       <CreateButton onClick={createEvent}>{labels.event.create}</CreateButton>
       <FilterContainer>
         <FilterTitle>{labels.common.filters}</FilterTitle>
+        <Column>
+          <StyledSubTitle>Title</StyledSubTitle>
+          <StyledTextInput
+            type="text"
+            placeholder="Search by title..."
+            value={filterState.title || ''}
+            onChange={(event: any) =>
+              onChange(EventFilterName.title)(event.target.value)
+            }
+          />
+        </Column>
         <Column>
           <StyledSubTitle>Administration</StyledSubTitle>
           <Row>
@@ -157,7 +206,7 @@ const EventFilters = () => {
           <Row>
             <StyledSubTitle>Prize</StyledSubTitle>
             <StyledSubTitle color={mainGreen}>
-              ${filterState.prizeMin || 0} - ${filterState.prizeMax || 0}
+              {renderPrizeRange()}
             </StyledSubTitle>
           </Row>
           <BodyText>From</BodyText>
@@ -182,6 +231,17 @@ const EventFilters = () => {
             step={1}
             type="range"
           />
+          <Column>
+            <StyledSubTitle>Country</StyledSubTitle>
+            <StyledTextInput
+              type="text"
+              placeholder="Search country..."
+              value={filterState.country || ''}
+              onChange={(event: any) =>
+                onChange(EventFilterName.country)(event.target.value)
+              }
+            />
+          </Column>
         </Column>
       </FilterContainer>
     </>

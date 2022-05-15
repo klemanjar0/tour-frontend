@@ -55,12 +55,28 @@ const Row = styled.div`
   margin-top: auto;
 `;
 
+const VideoRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+`;
+
 const Card = styled.div`
   margin-top: 1rem;
 `;
 
 const Body = styled.div`
   margin-top: 1.5rem;
+`;
+
+const VideoBody = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin: 1rem 0;
 `;
 
 const Title = styled.h2`
@@ -237,12 +253,27 @@ const EventManager = () => {
 
       <hr />
 
-      <Body>
-        <SubTitle>Details</SubTitle>
-        <Text>Type: {event?.type}</Text> <br />
-        <Text>Country: {event?.country}</Text> <br />
-        <Text>Prize: {event?.prizeFund}$</Text> <br />
-      </Body>
+      <VideoRow>
+        <Body>
+          <SubTitle>Details</SubTitle>
+          <Text>Type: {event?.type}</Text> <br />
+          <Text>Country: {event?.country}</Text> <br />
+          <Text>Prize: {event?.prizeFund}$</Text> <br />
+        </Body>
+
+        {event?.twitchUrl && event?.twitchUrl !== 'null' && (
+          <VideoBody>
+            <iframe
+              src={`${event?.twitchUrl}&parent=localhost`}
+              frameBorder="0"
+              allowFullScreen={true}
+              scrolling="no"
+              height="478"
+              width="720"
+            />
+          </VideoBody>
+        )}
+      </VideoRow>
 
       <Body>
         <SubTitle>Description</SubTitle>

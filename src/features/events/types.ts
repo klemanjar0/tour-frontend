@@ -51,6 +51,7 @@ export interface TransformedEvent {
   country?: string;
   prizeFund: number;
   status: EventStatuses;
+  twitchUrl?: string;
   createdAt?: string;
   updatedAt?: string;
   myRole?: EventRoles;
@@ -65,6 +66,7 @@ export interface EventFilters {
   prizeMin: number | null;
   prizeMax: number | null;
   status: EventStatuses | null;
+  title: string | null;
 }
 
 export enum EventFilterName {
@@ -74,4 +76,5 @@ export enum EventFilterName {
   prizeMin = 'prizeMin',
   prizeMax = 'prizeMax',
   status = 'status',
+  title = 'title',
 }

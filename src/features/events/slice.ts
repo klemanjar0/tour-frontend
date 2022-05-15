@@ -31,6 +31,7 @@ const filtersInitialState = {
   prizeMin: null,
   prizeMax: null,
   status: null,
+  title: null,
 };
 
 const initialState: EventsState = {
