@@ -10,7 +10,7 @@ import { pushNotification } from '../notifications/slice';
 import { notifications } from '../constants';
 import NetworkService from './NetworkService';
 
-export const server = 'http://localhost:4000/'; //'http://192.168.1.103:4000/'
+export const server = 'http://localhost:4000/'; //'http://192.168.0.139:4000/'
 export const socketServer = 'http://localhost:80/';
 export const origin = 'http://localhost:3000/';
 

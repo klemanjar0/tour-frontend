@@ -261,18 +261,20 @@ const EventManager = () => {
           <Text>Prize: {event?.prizeFund}$</Text> <br />
         </Body>
 
-        {event?.twitchUrl && event?.twitchUrl !== 'null' && (
-          <VideoBody>
-            <iframe
-              src={`${event?.twitchUrl}&parent=localhost`}
-              frameBorder="0"
-              allowFullScreen={true}
-              scrolling="no"
-              height="478"
-              width="720"
-            />
-          </VideoBody>
-        )}
+        {event?.twitchUrl &&
+          event?.twitchUrl !== 'null' &&
+          event.status === EventStatuses.ACTIVE && (
+            <VideoBody>
+              <iframe
+                src={`${event?.twitchUrl}&parent=localhost`}
+                frameBorder="0"
+                allowFullScreen={true}
+                scrolling="no"
+                height="478"
+                width="720"
+              />
+            </VideoBody>
+          )}
       </VideoRow>
 
       <Body>
